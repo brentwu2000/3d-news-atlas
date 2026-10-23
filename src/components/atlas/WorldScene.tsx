@@ -15,6 +15,7 @@ import { TIME_PRESETS, type TimePreset } from "@/lib/time-of-day";
 import { useAtlasStore } from "@/store/atlas-store";
 import { CameraDirector } from "./CameraDirector";
 import { CityMeshes } from "./CityMeshes";
+import { Crowd } from "./Crowd";
 import { DebugBridge } from "./DebugBridge";
 import { Beacons, type BeaconInstance } from "./EventMarker";
 import { getParticleMaterial, setGlow } from "./materials";
@@ -141,6 +142,7 @@ export default function WorldScene({ data, quality, reducedMotion, debug = false
         <RelationArc key={relation.id} from={from} to={to} type={relation.type} labelled={!showAllRelations || relation.fromEventId === selectedEventId || relation.toEventId === selectedEventId} />
       ))}
       <Surroundings bounds={world.bounds} quality={quality} preset={preset} animate={animate} smoke={world.smoke} />
+      <Crowd placements={world.placements} walkersPerTile={quality.walkersPerTile} cars={quality.cars} animate={animate} shadows={quality.shadows} />
       <Dust bounds={world.bounds} count={quality.particles} animate={animate} />
       <CameraDirector
         bounds={world.bounds}

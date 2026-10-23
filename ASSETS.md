@@ -8,6 +8,7 @@ reference website's code, models, or assets; the visual style was matched by ind
 | Hex city tiles, roads, kerbs, lane dashes, street lamps | Procedural geometry (`src/lib/city-geometry.ts`) | Project code |
 | 19 tile dioramas (buildings, trees, cranes, lighthouse, ferris wheel, stadium, turbines…) | Procedural, composed from three.js primitive geometries (`src/lib/tile-generator.ts`) | Project code; three.js MIT |
 | Window texture (lit / unlit panes) | Generated at runtime on a `<canvas>` (`src/components/atlas/materials.ts`) | Project code |
+| Pedestrians (original chibi figures) and cars | Procedural, three.js primitives (`src/lib/crowd.ts`, `src/components/atlas/Crowd.tsx`) | Project code |
 | Surroundings: forest, hills, rail loop, train, smoke, fireflies | Procedural (`src/lib/environment.ts`, `src/components/atlas/Surroundings.tsx`) | Project code |
 | UI icons | Hand-written SVG paths (`src/components/ui/icons.tsx`) | Project code |
 | Brand ("NEWS ATLAS. 海港市事件地圖") | Original | Project code |

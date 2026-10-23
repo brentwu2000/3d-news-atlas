@@ -14,6 +14,10 @@ export interface QualitySettings {
   particles: number;
   /** Cool back light (no shadows, cheap) that separates silhouettes from the navy backdrop. */
   rimLight: boolean;
+  /** Average pedestrians walking each tile's sidewalk. */
+  walkersPerTile: number;
+  /** Cars driving the road rings. */
+  cars: number;
 }
 
 export interface DeviceHints {
@@ -37,8 +41,8 @@ export function resolveQuality(preference: QualityPreference, hints: DeviceHints
 
 export function qualitySettings(level: QualityLevel): QualitySettings {
   return level === "high"
-    ? { level, dpr: [1, 1.5], antialias: true, shadows: true, shadowMapSize: 1024, propDensity: 1, terrainSegments: 24, particles: 90, rimLight: true }
-    : { level, dpr: [1, 1], antialias: false, shadows: false, shadowMapSize: 512, propDensity: 0.6, terrainSegments: 16, particles: 24, rimLight: true };
+    ? { level, dpr: [1, 1.5], antialias: true, shadows: true, shadowMapSize: 1024, propDensity: 1, terrainSegments: 24, particles: 90, rimLight: true, walkersPerTile: 4, cars: 14 }
+    : { level, dpr: [1, 1], antialias: false, shadows: false, shadowMapSize: 512, propDensity: 0.6, terrainSegments: 16, particles: 24, rimLight: true, walkersPerTile: 2, cars: 6 };
 }
 
 export function readDeviceHints(): DeviceHints {
