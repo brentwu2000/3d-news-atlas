@@ -7,36 +7,43 @@ export interface CameraPose {
   target: Vec3Tuple;
 }
 
-export const CAMERA_FOV = 40;
-const OVERVIEW_AZIMUTH = Math.PI / 4;
-const OVERVIEW_ELEVATION = (38 * Math.PI) / 180;
+export const CAMERA_FOV = 32;
+/** Camera sits south of the city (+z), turned slightly east, like a diorama on a table. */
+const OVERVIEW_AZIMUTH = Math.PI / 2 - 0.28;
+const OVERVIEW_ELEVATION = (50 * Math.PI) / 180;
+const BIRDSEYE_ELEVATION = (82 * Math.PI) / 180;
 
 /**
  * Deterministic overview pose that frames the whole world for a given
  * viewport aspect ratio. Same inputs always return the same pose.
  */
-export function overviewPose(bounds: WorldBounds, aspect: number, fovDeg = CAMERA_FOV): CameraPose {
+export function overviewPose(bounds: WorldBounds, aspect: number, fovDeg = CAMERA_FOV, elevation = OVERVIEW_ELEVATION): CameraPose {
   const safeAspect = Number.isFinite(aspect) && aspect > 0 ? aspect : 1;
   const vFov = (fovDeg * Math.PI) / 180;
   const hFov = 2 * Math.atan(Math.tan(vFov / 2) * safeAspect);
   const limiting = Math.min(vFov, hFov);
-  // Pad slightly so island bases and labels stay in frame.
-  // Seen from above, the island ring fills less height than its bounding sphere,
-  // so landscape can frame tighter than portrait (which is width-limited).
-  // tests/unit/silhouette.test.ts guards that every island stays on screen.
-  const fit = hFov < vFov ? 1.02 : 0.92;
+  // Seen from above at an angle the hex city is foreshortened vertically, so
+  // landscape frames tighter than portrait (width-limited). The camera-frame
+  // unit test guards that every tile stays on screen.
+  // Landscape crops the outer ring slightly, like a close-up diorama; the index lists every tile.
+  const fit = hFov < vFov ? 0.96 : 0.74;
   const distance = (bounds.radius * fit) / Math.sin(limiting / 2);
   const [cx, cy, cz] = bounds.center;
-  const ty = cy - 1;
-  const horizontal = Math.cos(OVERVIEW_ELEVATION) * distance;
+  const ty = cy;
+  const horizontal = Math.cos(elevation) * distance;
   return {
     target: [cx, ty, cz],
     position: [
       round(cx + Math.cos(OVERVIEW_AZIMUTH) * horizontal),
-      round(ty + Math.sin(OVERVIEW_ELEVATION) * distance),
+      round(ty + Math.sin(elevation) * distance),
       round(cz + Math.sin(OVERVIEW_AZIMUTH) * horizontal),
     ],
   };
+}
+
+/** Near top-down view of the whole city ("鳥瞰"). */
+export function birdseyePose(bounds: WorldBounds, aspect: number, fovDeg = CAMERA_FOV): CameraPose {
+  return overviewPose(bounds, aspect, fovDeg, BIRDSEYE_ELEVATION);
 }
 
 export interface OrbitLimits {
@@ -50,13 +57,13 @@ export interface OrbitLimits {
 
 export function orbitLimits(bounds: WorldBounds): OrbitLimits {
   return {
-    minDistance: 6,
-    // Portrait phones need ~6x radius to frame the whole world (see overviewPose).
-    maxDistance: bounds.radius * 8,
-    minPolarAngle: 0.15,
-    // Stop a little below the horizon so the camera never ends up under the world.
-    maxPolarAngle: Math.PI * 0.62,
-    panRadius: bounds.radius * 1.1,
+    minDistance: 8,
+    // Very narrow portrait screens (aspect ≈ 0.5) need ~6.8x radius to frame the city.
+    maxDistance: bounds.radius * 7.5,
+    minPolarAngle: 0.05,
+    // Keep looking down on the city; never skim the ground or go under it.
+    maxPolarAngle: Math.PI * 0.42,
+    panRadius: bounds.radius * 0.9,
   };
 }
 
@@ -87,14 +94,14 @@ export interface FocusOptions {
   occludedRight?: number;
 }
 
-const FOCUS_ELEVATION = (40 * Math.PI) / 180;
+const FOCUS_ELEVATION = (50 * Math.PI) / 180;
 /** Keep the focus camera from getting so close that it clips terrain or feels nauseating. */
 export const FOCUS_MIN_DISTANCE = 12;
 export const FOCUS_MAX_DISTANCE = 60;
 
 /** Desktop and mobile framing targets for a focused island. */
-export const FOCUS_WIDTH_DESKTOP = 0.45;
-export const FOCUS_WIDTH_MOBILE = 0.4;
+export const FOCUS_WIDTH_DESKTOP = 0.5;
+export const FOCUS_WIDTH_MOBILE = 0.42;
 
 /**
  * Deterministic focus pose for one island: fixed azimuth/elevation, distance
@@ -120,7 +127,7 @@ export function focusPose(
   const right: Vec3Tuple = [Math.sin(az), 0, -Math.cos(az)];
   const target: Vec3Tuple = [
     round(island.x + right[0] * shift),
-    round(island.y + 1),
+    round(island.y + 0.6),
     round(island.z + right[2] * shift),
   ];
   const horizontal = Math.cos(FOCUS_ELEVATION) * distance;

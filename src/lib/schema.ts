@@ -9,7 +9,28 @@ import { z } from "zod";
  * - Event.isFictional: fixtures must be explicitly labelled as fictional samples.
  */
 
-export const ISLAND_PRESETS = ["city", "forest", "industry", "coast", "civic"] as const;
+/** One diorama theme per hex tile (see tile-generator). */
+export const ISLAND_PRESETS = [
+  "city",
+  "forest",
+  "industry",
+  "coast",
+  "civic",
+  "port",
+  "market",
+  "river",
+  "school",
+  "housing",
+  "fair",
+  "hospital",
+  "energy",
+  "oldtown",
+  "reservoir",
+  "farm",
+  "stadium",
+  "tech",
+  "mountain",
+] as const;
 export const IslandPresetSchema = z.enum(ISLAND_PRESETS);
 export type IslandPreset = z.infer<typeof IslandPresetSchema>;
 
@@ -59,6 +80,8 @@ const text = (max: number) => z.string().trim().min(1).max(max);
 export const TopicSchema = z
   .object({
     id: slug,
+    /** Short tile label (map pill, index list); keep it to a few characters. */
+    shortTitle: text(8),
     title: text(120),
     description: text(600),
     category: text(40),

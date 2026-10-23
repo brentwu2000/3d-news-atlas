@@ -5,6 +5,7 @@ import { ISLAND_PRESETS, TopicListSchema, TopicSchema } from "@/lib/schema";
 
 const valid = {
   id: "sample-topic",
+  shortTitle: "測試",
   title: "【虛構範例】測試",
   description: "測試用描述",
   category: "測試",
@@ -13,11 +14,11 @@ const valid = {
 };
 
 describe("TopicSchema", () => {
-  it("accepts the bundled fixtures (>= 5 topics, every preset used)", () => {
+  it("accepts the bundled fixtures (19 topics, every preset used)", () => {
     const parsed = TopicListSchema.parse(topicsJson);
     expect(parsed.length).toBeGreaterThanOrEqual(5);
     expect(new Set(parsed.map((t) => t.theme))).toEqual(new Set(ISLAND_PRESETS));
-    parsed.forEach((t) => expect(t.title).toContain("虛構"));
+    parsed.forEach((t) => expect(t.description).toContain("虛構"));
   });
 
   it.each([
@@ -26,6 +27,8 @@ describe("TopicSchema", () => {
     ["fractional seed", { ...valid, seed: 1.5 }],
     ["non-slug id", { ...valid, id: "Not A Slug" }],
     ["empty title", { ...valid, title: "  " }],
+    ["missing short title", { ...valid, shortTitle: undefined }],
+    ["short title too long", { ...valid, shortTitle: "這是一個太長的短標題名稱" }],
     ["unknown key", { ...valid, extra: true }],
     ["missing description", { ...valid, description: undefined }],
   ])("rejects %s", (_, input) => {

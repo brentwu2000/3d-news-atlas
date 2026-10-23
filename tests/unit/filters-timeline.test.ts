@@ -31,7 +31,7 @@ describe("search and category filters", () => {
     expect(civic.length).toBeGreaterThan(0);
     civic.forEach((e) => expect(e.topicId).toBe("central-council-budget"));
     const two = filterEvents(data, { ...EMPTY_FILTERS, categories: ["公共政策", "環境"] });
-    expect(new Set(two.map((e) => e.topicId))).toEqual(new Set(["central-council-budget", "greenridge-reforestation"]));
+    expect(new Set(two.map((e) => e.topicId))).toEqual(new Set(["central-council-budget", "greenridge-reforestation", "jade-river-cleanup"]));
   });
 
   it("applies the date cutoff inclusively, by Asia/Taipei calendar day", () => {

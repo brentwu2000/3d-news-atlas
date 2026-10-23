@@ -1,44 +1,52 @@
 "use client";
 
 import { Html, QuadraticBezierLine } from "@react-three/drei";
-import type { Vec3 } from "@/lib/island-generator";
 import { RELATION_LABELS } from "@/lib/labels";
 import type { RelationType } from "@/lib/schema";
+import type { Vec3 } from "@/lib/tile-generator";
 
 interface RelationArcProps {
   from: Vec3;
   to: Vec3;
   type: RelationType;
-  color: string;
+  /** Show the relation-type label at the arc's apex. */
+  labelled: boolean;
 }
 
+/** Same colour for every relation type: it never implies truth or strength. */
+const ARC_COLOR = "#e0412f";
+
 /**
- * Curved link between two event markers. Only explicitly curated relations
- * are drawn. Type is distinguished by line style + text label; the line
- * colour is the same for every type so it never implies truth or strength.
+ * Curved link between two event beacons. Only explicitly curated relations
+ * are drawn; the type is shown as text (and causal claims are dashed more
+ * finely), never by colour.
  */
-export function RelationArc({ from, to, type, color }: RelationArcProps) {
+export function RelationArc({ from, to, type, labelled }: RelationArcProps) {
   const distance = Math.hypot(to[0] - from[0], to[2] - from[2]);
-  const mid: Vec3 = [(from[0] + to[0]) / 2, Math.max(from[1], to[1]) + 1.5 + distance * 0.18, (from[2] + to[2]) / 2];
-  const labelPos: Vec3 = [mid[0], (mid[1] + Math.max(from[1], to[1])) / 2 + 0.6, mid[2]];
+  const apex = 2.5 + distance * 0.22;
+  const mid: Vec3 = [(from[0] + to[0]) / 2, apex * 2 - 2, (from[2] + to[2]) / 2];
+  const labelPos: Vec3 = [mid[0], apex, mid[2]];
+  const causal = type === "causal_claim";
   return (
     <group raycast={() => null}>
       <QuadraticBezierLine
-        start={from}
-        end={to}
+        start={[from[0], 2.4, from[2]]}
+        end={[to[0], 2.4, to[2]]}
         mid={mid}
-        color={color}
-        lineWidth={2}
-        dashed={type === "causal_claim"}
-        dashSize={0.5}
-        gapSize={0.35}
+        color={ARC_COLOR}
+        lineWidth={2.5}
+        dashed
+        dashSize={causal ? 0.25 : 0.7}
+        gapSize={causal ? 0.25 : 0.35}
         raycast={() => null}
       />
-      <Html position={labelPos} center zIndexRange={[4, 0]} style={{ pointerEvents: "none" }}>
-        <span aria-hidden="true" className="rounded bg-slate-950/80 px-1.5 py-0.5 text-[11px] whitespace-nowrap text-slate-100 ring-1 ring-white/15">
-          {RELATION_LABELS[type]}
-        </span>
-      </Html>
+      {labelled && (
+        <Html position={labelPos} center zIndexRange={[4, 0]} style={{ pointerEvents: "none" }}>
+          <span aria-hidden="true" className="arc-pill">
+            {RELATION_LABELS[type]}
+          </span>
+        </Html>
+      )}
     </group>
   );
 }

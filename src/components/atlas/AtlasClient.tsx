@@ -52,10 +52,7 @@ export function AtlasClient({ data, occludedRightPx, desktop }: AtlasClientProps
   const sceneStatus = useAtlasStore((s) => s.sceneStatus);
   const sceneGeneration = useAtlasStore((s) => s.sceneGeneration);
   const cameraMode = useAtlasStore((s) => s.cameraMode);
-  const hasSelection = useAtlasStore((s) => s.selectedTopicId !== null);
-  const setQualityPreference = useAtlasStore((s) => s.setQualityPreference);
   const setSceneStatus = useAtlasStore((s) => s.setSceneStatus);
-  const requestOverview = useAtlasStore((s) => s.requestOverview);
   const retryScene = useAtlasStore((s) => s.retryScene);
 
   const quality = useMemo(() => {
@@ -99,7 +96,7 @@ export function AtlasClient({ data, occludedRightPx, desktop }: AtlasClientProps
       <div
         className="absolute inset-0"
         role="img"
-        aria-label="3D 主題島嶼地圖。點選島嶼聚焦主題、點選標記開啟事件；所有內容亦可透過主題列表以鍵盤瀏覽。"
+        aria-label="由十九格六邊形組成的 3D 城市地圖。點選一格聚焦主題、點選光柱開啟事件；所有內容亦可透過右側清單以鍵盤瀏覽。"
       >
         <SceneErrorBoundary key={sceneGeneration} onError={handleError} fallback={null}>
           <WorldScene
@@ -116,34 +113,10 @@ export function AtlasClient({ data, occludedRightPx, desktop }: AtlasClientProps
         </SceneErrorBoundary>
       </div>
 
-      <div className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between gap-2 p-3">
-        <div className="ui-surface pointer-events-auto flex flex-wrap items-center gap-1 rounded-lg p-1">
-          <button type="button" onClick={requestOverview} className="ui-button">
-            {hasSelection ? "返回總覽" : "重設視角"}
-          </button>
-          <label className="flex items-center gap-1 pr-1 text-sm text-[var(--ui-muted)]">
-            <span>畫質</span>
-            <select
-              value={qualityPreference}
-              onChange={(e) => setQualityPreference(e.target.value as QualityPreference)}
-              className="ui-input py-1"
-            >
-              <option value="auto">自動（{quality.level === "high" ? "高" : "低"}）</option>
-              <option value="high">高</option>
-              <option value="low">低</option>
-            </select>
-          </label>
-        </div>
-        <p className="ui-surface hidden rounded-lg px-2.5 py-1.5 text-xs text-[var(--ui-muted)] md:block">
-          <span className="pointer-coarse:hidden">拖曳旋轉 · 右鍵平移 · 滾輪縮放 · Esc 返回</span>
-          <span className="hidden pointer-coarse:inline">單指旋轉 · 雙指平移與縮放</span>
-        </p>
-      </div>
-
       {env.debug && (
         <output
           id={PERF_OUTPUT_ID}
-          className="pointer-events-none absolute top-14 left-3 rounded bg-black/70 px-2 py-1 font-mono text-[11px] text-white"
+          className="pointer-events-none absolute bottom-3 left-3 z-10 rounded bg-black/70 px-2 py-1 font-mono text-[11px] text-white"
         />
       )}
 
@@ -169,7 +142,7 @@ function SceneShell({
       data-scene-status={status}
       data-quality={quality}
       data-camera-mode={cameraMode}
-      className="atlas-backdrop relative h-full min-h-0 w-full overflow-hidden"
+      className="relative h-full min-h-0 w-full overflow-hidden bg-[var(--scene-bg)]"
     >
       {children ?? <LoadingOverlay />}
     </div>
@@ -179,7 +152,7 @@ function SceneShell({
 function LoadingOverlay() {
   return (
     <div role="status" aria-live="polite" className="absolute inset-0 grid place-items-center">
-      <p className="ui-surface rounded-full px-4 py-2 text-sm text-[var(--ui-text)]">載入 3D 場景中…</p>
+      <p className="card rounded-full px-4 py-2 text-sm">載入 3D 城市中…</p>
     </div>
   );
 }

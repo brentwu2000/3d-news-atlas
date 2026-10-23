@@ -70,5 +70,73 @@
     "type": "chronological",
     "explanation": "同一份年度預算從送交到三讀的程序。",
     "sourceIds": []
+  },
+  {
+    "id": "rel-logistics-congestion",
+    "fromEventId": "hl-crane-expansion",
+    "toEventId": "hl-truck-congestion",
+    "type": "causal_claim",
+    "explanation": "居民陳情書聲稱，新起重機啟用後貨車量增加導致回堵。港務單位未證實兩者因果。",
+    "sourceIds": [
+      "src-hl-truck-congestion-1"
+    ]
+  },
+  {
+    "id": "rel-reservoir-recovery",
+    "fromEventId": "cl-storage-low",
+    "toEventId": "cl-rain-recovery",
+    "type": "chronological",
+    "explanation": "同一座水庫從減壓供水到解除的先後兩階段。",
+    "sourceIds": []
+  },
+  {
+    "id": "rel-river-fish",
+    "fromEventId": "jr-revetment-work",
+    "toEventId": "jr-fish-return",
+    "type": "causal_claim",
+    "explanation": "社區團體聲稱護岸工程改善了棲地使魚群回游；研究單位表示尚無證據。",
+    "sourceIds": [
+      "src-jr-fish-return-2"
+    ]
+  },
+  {
+    "id": "rel-festival-traffic",
+    "fromEventId": "hf-crowd-control",
+    "toEventId": "ha-traffic-plan",
+    "type": "related",
+    "explanation": "兩項大型活動的交通管制採用類似的接駁與分流做法。",
+    "sourceIds": []
+  },
+  {
+    "id": "rel-housing-tender",
+    "fromEventId": "es-tender-award",
+    "toEventId": "cc-transit-amendment",
+    "type": "related",
+    "explanation": "社宅與交通預算都在同一會期的預算審議中討論。",
+    "sourceIds": []
+  },
+  {
+    "id": "rel-slope-drill",
+    "fromEventId": "nh-slope-sensors",
+    "toEventId": "nh-evacuation-drill",
+    "type": "chronological",
+    "explanation": "監測系統上線後舉行的第一次疏散演練。",
+    "sourceIds": []
+  },
+  {
+    "id": "rel-energy-industry",
+    "fromEventId": "we-grid-connection",
+    "toEventId": "nb-emissions-claim",
+    "type": "related",
+    "explanation": "兩則報導都涉及工業區能源轉換的成效討論。",
+    "sourceIds": []
+  },
+  {
+    "id": "rel-market-hygiene",
+    "fromEventId": "nm-stall-redraw",
+    "toEventId": "nm-hygiene-inspection",
+    "type": "chronological",
+    "explanation": "攤位重劃完成後進行的第一次衛生稽查。",
+    "sourceIds": []
   }
 ]

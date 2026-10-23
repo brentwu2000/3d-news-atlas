@@ -23,7 +23,7 @@ const report = { label, baseUrl, renderer: "headless Chromium + SwiftShader (sof
 for (const target of targets) {
   const ctx = await browser.newContext(target.context);
   const page = await ctx.newPage();
-  await page.goto(`${baseUrl}/?debug=1`, { waitUntil: "load" });
+  await page.goto(`${baseUrl}/?debug=1&intro=0`, { waitUntil: "load" });
   await page.waitForSelector('[data-scene-status="ready"]', { timeout: 30_000 });
   // Discard the warm-up window, then average a few 1s samples.
   await page.waitForFunction(() => (window.__ATLAS_STATS__?.samples ?? 0) >= 2, null, { timeout: 30_000 });
@@ -53,7 +53,7 @@ for (const target of targets) {
     transfer,
   };
   // Screenshot without the debug overlay so before/after images compare cleanly.
-  await page.goto(`${baseUrl}/`, { waitUntil: "load" });
+  await page.goto(`${baseUrl}/?intro=0`, { waitUntil: "load" });
   await page.waitForSelector('[data-scene-status="ready"]', { timeout: 30_000 });
   await page.waitForTimeout(2500);
   await page.screenshot({ path: `${outDir}/${target.name}.png` });
@@ -62,7 +62,7 @@ for (const target of targets) {
 
 const fallbackCtx = await browser.newContext(targets[1].context);
 const fallbackPage = await fallbackCtx.newPage();
-await fallbackPage.goto(`${baseUrl}/?webgl=0`);
+await fallbackPage.goto(`${baseUrl}/?webgl=0&intro=0`);
 await fallbackPage.waitForSelector('[data-testid="webgl-fallback"]');
 await fallbackPage.screenshot({ path: `${outDir}/fallback-mobile.png` });
 await fallbackCtx.close();

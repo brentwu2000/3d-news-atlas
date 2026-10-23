@@ -21,9 +21,9 @@ export function SearchField({ className = "" }: { className?: string }) {
         value={query}
         maxLength={100}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="搜尋標題、摘要或標籤…"
+        placeholder="搜尋事件、標題、標籤…"
         autoComplete="off"
-        className="ui-input w-full"
+        className="field"
       />
     </div>
   );
@@ -40,7 +40,7 @@ export function CategoryChips({ categories, className = "" }: { categories: read
           type="button"
           aria-pressed={selected.includes(category)}
           onClick={() => toggleCategory(category)}
-          className="ui-chip"
+          className="chip"
         >
           {category}
         </button>

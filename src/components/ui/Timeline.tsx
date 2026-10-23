@@ -5,6 +5,8 @@ import type { AtlasData, EventFilters } from "@/lib/normalize";
 import { filterEventsIgnoringDate } from "@/lib/normalize";
 import { cutoffForIndex, cutoffIndex, dayKey, formatDay, nextPlaybackCutoff } from "@/lib/timeline";
 import { useAtlasStore } from "@/store/atlas-store";
+import { CategoryChips } from "./Filters";
+import { Icon } from "./icons";
 
 /** Playback advances one event-day per tick. Discrete steps, so also fine under reduced motion. */
 export const PLAYBACK_STEP_MS = 1200;
@@ -13,14 +15,15 @@ interface TimelineProps {
   data: AtlasData;
   filters: EventFilters;
   visibleCount: number;
+  onClose?: () => void;
 }
 
 /**
- * Date cutoff over the days that have events (after search/category filters).
- * The range input is natively keyboard accessible; aria-valuetext announces
- * the date and how many events are shown.
+ * "時間軸與篩選": category filter + date cutoff over the days that have
+ * events. The range input is natively keyboard accessible; aria-valuetext
+ * announces the date and how many events are shown.
  */
-export function Timeline({ data, filters, visibleCount }: TimelineProps) {
+export function Timeline({ data, filters, visibleCount, onClose }: TimelineProps) {
   const playing = useAtlasStore((s) => s.playing);
   const setPlaying = useAtlasStore((s) => s.setPlaying);
   const setUntil = useAtlasStore((s) => s.setUntil);
@@ -30,6 +33,18 @@ export function Timeline({ data, filters, visibleCount }: TimelineProps) {
   const index = cutoffIndex(days, filters.until);
   const label = filters.until ? `至 ${formatDay(filters.until)}` : "全部日期";
   const valueText = `${label}，顯示 ${visibleCount} / ${matching.length} 則事件`;
+
+  // Monthly histogram of matching events (counts only).
+  const months = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const e of matching) {
+      const m = dayKey(e.occurredAt).slice(0, 7);
+      map.set(m, (map.get(m) ?? 0) + 1);
+    }
+    return [...map].sort(([a], [b]) => a.localeCompare(b));
+  }, [matching]);
+  const maxMonth = Math.max(1, ...months.map(([, n]) => n));
+  const untilMonth = filters.until?.slice(0, 7) ?? null;
 
   useEffect(() => {
     if (!playing) return;
@@ -45,40 +60,62 @@ export function Timeline({ data, filters, visibleCount }: TimelineProps) {
   const disabled = days.length < 2;
 
   return (
-    <div role="group" aria-label="時間軸" className="flex w-full items-center gap-2 rounded-lg py-0.5 lg:border lg:border-[var(--ui-border)] lg:bg-[var(--ui-surface)] lg:px-2 lg:py-1.5 lg:backdrop-blur-sm">
-      <button
-        type="button"
-        onClick={() => setPlaying(!playing)}
-        aria-pressed={playing}
-        disabled={disabled}
-        className="ui-button shrink-0"
-      >
-        {playing ? "暫停" : "播放"}
-      </button>
-      <label htmlFor="timeline-range" className="sr-only">
-        依發生日期篩選
-      </label>
-      <input
-        id="timeline-range"
-        type="range"
-        min={0}
-        max={Math.max(0, days.length - 1)}
-        step={1}
-        value={index}
-        disabled={disabled}
-        aria-valuetext={valueText}
-        onChange={(e) => {
-          setPlaying(false);
-          setUntil(cutoffForIndex(days, Number(e.target.value)));
-        }}
-        className="min-w-0 flex-1 accent-[var(--atlas-highlight)]"
-      />
-      <p className="w-28 shrink-0 text-right text-xs leading-tight text-[var(--ui-text)] sm:w-48" aria-live="polite" data-testid="timeline-label">
-        <span className="block truncate">{label}</span>
-        <span className="block text-[var(--ui-muted)]">
+    <section role="group" aria-labelledby="timeline-heading" className="flex flex-col gap-3">
+      <div className="flex items-start justify-between gap-2">
+        <div>
+          <p className="kicker">Timeline</p>
+          <h2 id="timeline-heading" className="display mt-0.5 text-[20px]">
+            時間軸與篩選
+          </h2>
+        </div>
+        {onClose && (
+          <button type="button" onClick={onClose} className="grid h-9 w-9 place-items-center rounded-full hover:bg-paper-strong" aria-label="關閉時間軸">
+            <Icon name="close" />
+          </button>
+        )}
+      </div>
+      <CategoryChips categories={data.categories} className="flex-wrap" />
+      <div aria-hidden="true" className="flex h-12 items-end gap-1">
+        {months.map(([m, n]) => (
+          <div key={m} className="flex flex-1 flex-col items-center gap-1">
+            <div
+              className={`w-full rounded-t ${untilMonth && m > untilMonth ? "bg-paper-sunk" : "bg-ink-2"}`}
+              style={{ height: `${(n / maxMonth) * 32 + 4}px` }}
+            />
+            <span className="font-mono text-[9.5px] text-muted">{Number(m.slice(5))}月</span>
+          </div>
+        ))}
+      </div>
+      <div className="flex items-center gap-2">
+        <button type="button" onClick={() => setPlaying(!playing)} aria-pressed={playing} disabled={disabled} className="btn btn-dark shrink-0 !px-3">
+          <Icon name={playing ? "pause" : "play"} size={14} />
+          {playing ? "暫停" : "播放"}
+        </button>
+        <label htmlFor="timeline-range" className="sr-only">
+          依發生日期篩選
+        </label>
+        <input
+          id="timeline-range"
+          type="range"
+          min={0}
+          max={Math.max(0, days.length - 1)}
+          step={1}
+          value={index}
+          disabled={disabled}
+          aria-valuetext={valueText}
+          onChange={(e) => {
+            setPlaying(false);
+            setUntil(cutoffForIndex(days, Number(e.target.value)));
+          }}
+          className="min-w-0 flex-1 accent-[var(--accent)]"
+        />
+      </div>
+      <p className="flex items-center justify-between text-[12.5px]" aria-live="polite" data-testid="timeline-label">
+        <span className="font-semibold">{label}</span>
+        <span className="font-mono text-muted">
           {visibleCount} / {matching.length} 則
         </span>
       </p>
-    </div>
+    </section>
   );
 }

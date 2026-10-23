@@ -431,5 +431,756 @@
     ],
     "status": "reported",
     "isFictional": true
+  },
+  {
+    "id": "hl-crane-expansion",
+    "topicId": "harbor-logistics",
+    "title": "碼頭新增兩座橋式起重機",
+    "summary": "擴建碼頭啟用兩座新起重機，港務單位表示裝卸效率預計提升，周邊道路同步調整貨車動線。",
+    "occurredAt": "2026-01-20T10:00:00+08:00",
+    "publishedAt": "2026-01-20T18:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-hl-crane-expansion-1",
+        "title": "碼頭新起重機啟用",
+        "url": "https://example.org/fictional/hd/hl-crane-expansion-1",
+        "publisher": "海港日報（虛構）",
+        "publishedAt": "2026-01-20T18:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "港口",
+      "物流"
+    ],
+    "status": "verified",
+    "isFictional": true
+  },
+  {
+    "id": "hl-truck-congestion",
+    "topicId": "harbor-logistics",
+    "title": "貨車排隊回堵引發居民陳情",
+    "summary": "尖峰時段貨車排隊延伸至住宅區，居民陳情噪音與安全問題，港務與交通單位研議分流。",
+    "occurredAt": "2026-04-08T10:00:00+08:00",
+    "publishedAt": "2026-04-08T20:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-hl-truck-congestion-1",
+        "title": "碼頭貨車回堵 居民陳情",
+        "url": "https://example.org/fictional/radio/hl-truck-congestion-1",
+        "publisher": "海港廣播（虛構）",
+        "publishedAt": "2026-04-08T20:00:00+08:00"
+      },
+      {
+        "id": "src-hl-truck-congestion-2",
+        "title": "碼頭周邊交通量整理",
+        "url": "https://example.org/fictional/obs/hl-truck-congestion-2",
+        "publisher": "公民觀察站（虛構）",
+        "publishedAt": "2026-04-10T09:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "港口",
+      "交通",
+      "陳情"
+    ],
+    "status": "reported",
+    "isFictional": true
+  },
+  {
+    "id": "nm-stall-redraw",
+    "topicId": "lantern-night-market",
+    "title": "夜市攤位重新劃設",
+    "summary": "夜市管理會完成攤位重劃，主要走道加寬，部分攤商反映營業面積縮小。",
+    "occurredAt": "2026-02-14T19:00:00+08:00",
+    "publishedAt": "2026-02-15T08:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-nm-stall-redraw-1",
+        "title": "夜市攤位重劃 走道加寬",
+        "url": "https://example.org/fictional/hd/nm-stall-redraw-1",
+        "publisher": "海港日報（虛構）",
+        "publishedAt": "2026-02-15T08:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "夜市",
+      "攤商"
+    ],
+    "status": "reported",
+    "isFictional": true
+  },
+  {
+    "id": "nm-hygiene-inspection",
+    "topicId": "lantern-night-market",
+    "title": "衛生稽查結果公布",
+    "summary": "衛生單位抽驗夜市攤位，多數合格，少數攤位限期改善並將複查。",
+    "occurredAt": "2026-03-28T10:00:00+08:00",
+    "publishedAt": "2026-03-28T17:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-nm-hygiene-inspection-1",
+        "title": "夜市衛生稽查結果",
+        "url": "https://example.org/fictional/gov/nm-hygiene-inspection-1",
+        "publisher": "海港市政府新聞稿（虛構）",
+        "publishedAt": "2026-03-28T17:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "夜市",
+      "食品衛生"
+    ],
+    "status": "verified",
+    "isFictional": true
+  },
+  {
+    "id": "nm-parking-dispute",
+    "topicId": "lantern-night-market",
+    "title": "周邊停車收費方案有爭議",
+    "summary": "市府提出夜市周邊停車收費方案，商圈與居民對收費時段看法分歧。",
+    "occurredAt": "2026-05-12T10:00:00+08:00",
+    "publishedAt": "2026-05-12T21:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-nm-parking-dispute-1",
+        "title": "夜市停車收費 商圈居民各有意見",
+        "url": "https://example.org/fictional/radio/nm-parking-dispute-1",
+        "publisher": "海港廣播（虛構）",
+        "publishedAt": "2026-05-12T21:00:00+08:00"
+      },
+      {
+        "id": "src-nm-parking-dispute-2",
+        "title": "停車收費方案比較",
+        "url": "https://example.org/fictional/obs/nm-parking-dispute-2",
+        "publisher": "公民觀察站（虛構）",
+        "publishedAt": "2026-05-13T10:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "夜市",
+      "停車",
+      "爭議"
+    ],
+    "status": "disputed",
+    "isFictional": true
+  },
+  {
+    "id": "jr-water-quality",
+    "topicId": "jade-river-cleanup",
+    "title": "溪流水質監測報告出爐",
+    "summary": "監測報告顯示中游水質改善，下游仍有生活污水排入問題。",
+    "occurredAt": "2026-01-30T10:00:00+08:00",
+    "publishedAt": "2026-01-30T16:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-jr-water-quality-1",
+        "title": "玉帶溪水質季報",
+        "url": "https://example.org/fictional/gov/jr-water-quality-1",
+        "publisher": "海港市政府新聞稿（虛構）",
+        "publishedAt": "2026-01-30T16:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "河川",
+      "水質"
+    ],
+    "status": "verified",
+    "isFictional": true
+  },
+  {
+    "id": "jr-revetment-work",
+    "topicId": "jade-river-cleanup",
+    "title": "護岸工程開工",
+    "summary": "護岸改善工程開工，施工期間部分河濱步道封閉。",
+    "occurredAt": "2026-03-16T10:00:00+08:00",
+    "publishedAt": "2026-03-16T15:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-jr-revetment-work-1",
+        "title": "玉帶溪護岸工程開工",
+        "url": "https://example.org/fictional/hd/jr-revetment-work-1",
+        "publisher": "海港日報（虛構）",
+        "publishedAt": "2026-03-16T15:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "河川",
+      "工程"
+    ],
+    "status": "reported",
+    "isFictional": true
+  },
+  {
+    "id": "jr-fish-return",
+    "topicId": "jade-river-cleanup",
+    "title": "魚群回游說法待確認",
+    "summary": "社區團體表示觀察到魚群回游，研究單位表示需要更多調查才能確認。",
+    "occurredAt": "2026-05-22T10:00:00+08:00",
+    "publishedAt": "2026-05-22T19:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-jr-fish-return-1",
+        "title": "玉帶溪魚群回游？",
+        "url": "https://example.org/fictional/tv/jr-fish-return-1",
+        "publisher": "城市電視台（虛構）",
+        "publishedAt": "2026-05-22T19:00:00+08:00"
+      },
+      {
+        "id": "src-jr-fish-return-2",
+        "title": "回游觀察紀錄與研究單位回應",
+        "url": "https://example.org/fictional/obs/jr-fish-return-2",
+        "publisher": "公民觀察站（虛構）",
+        "publishedAt": "2026-05-24T11:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "河川",
+      "生態"
+    ],
+    "status": "disputed",
+    "isFictional": true
+  },
+  {
+    "id": "ms-walkway-opening",
+    "topicId": "maple-school-safety",
+    "title": "通學步道完工啟用",
+    "summary": "學校周邊人行道拓寬並加設護欄，家長會表示上下學動線更清楚。",
+    "occurredAt": "2026-02-24T07:30:00+08:00",
+    "publishedAt": "2026-02-24T12:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-ms-walkway-opening-1",
+        "title": "楓林國小通學步道啟用",
+        "url": "https://example.org/fictional/hd/ms-walkway-opening-1",
+        "publisher": "海港日報（虛構）",
+        "publishedAt": "2026-02-24T12:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "校園",
+      "交通安全"
+    ],
+    "status": "verified",
+    "isFictional": true
+  },
+  {
+    "id": "ms-safety-drill",
+    "topicId": "maple-school-safety",
+    "title": "校園防災演練舉行",
+    "summary": "學校舉行地震與疏散演練，全校師生於規定時間內完成集合。",
+    "occurredAt": "2026-04-15T09:00:00+08:00",
+    "publishedAt": "2026-04-15T13:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-ms-safety-drill-1",
+        "title": "楓林國小防災演練",
+        "url": "https://example.org/fictional/radio/ms-safety-drill-1",
+        "publisher": "海港廣播（虛構）",
+        "publishedAt": "2026-04-15T13:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "校園",
+      "防災"
+    ],
+    "status": "reported",
+    "isFictional": true
+  },
+  {
+    "id": "es-tender-award",
+    "topicId": "eastgate-social-housing",
+    "title": "社宅工程完成決標",
+    "summary": "東門社宅工程完成決標，預計興建四百戶，市府公布施工期程。",
+    "occurredAt": "2026-01-12T10:00:00+08:00",
+    "publishedAt": "2026-01-12T17:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-es-tender-award-1",
+        "title": "東門社宅決標說明",
+        "url": "https://example.org/fictional/gov/es-tender-award-1",
+        "publisher": "海港市政府新聞稿（虛構）",
+        "publishedAt": "2026-01-12T17:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "社宅",
+      "標案"
+    ],
+    "status": "verified",
+    "isFictional": true
+  },
+  {
+    "id": "es-application-correction",
+    "topicId": "eastgate-social-housing",
+    "title": "入住申請資格說明更正",
+    "summary": "市府公告入住申請資格，後續更正收入計算方式並延長申請期限。",
+    "occurredAt": "2026-03-05T10:00:00+08:00",
+    "publishedAt": "2026-03-05T18:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-es-application-correction-1",
+        "title": "社宅申請資格公告",
+        "url": "https://example.org/fictional/hd/es-application-correction-1",
+        "publisher": "海港日報（虛構）",
+        "publishedAt": "2026-03-05T18:00:00+08:00"
+      },
+      {
+        "id": "src-es-application-correction-2",
+        "title": "申請資格更正公告",
+        "url": "https://example.org/fictional/gov/es-application-correction-2",
+        "publisher": "海港市政府新聞稿（虛構）",
+        "publishedAt": "2026-03-09T10:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "社宅",
+      "申請"
+    ],
+    "status": "corrected",
+    "isFictional": true,
+    "correctionNote": "初版公告的家戶收入計算方式有誤，市府於三月九日發布更正，並將申請期限延長兩週。"
+  },
+  {
+    "id": "hf-crowd-control",
+    "topicId": "harvest-festival",
+    "title": "豐收節人流管制計畫公布",
+    "summary": "主辦單位公布分區入場與接駁車計畫，周邊道路實施交通管制。",
+    "occurredAt": "2026-04-02T10:00:00+08:00",
+    "publishedAt": "2026-04-02T16:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-hf-crowd-control-1",
+        "title": "豐收節交通與人流管制",
+        "url": "https://example.org/fictional/gov/hf-crowd-control-1",
+        "publisher": "海港市政府新聞稿（虛構）",
+        "publishedAt": "2026-04-02T16:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "節慶",
+      "交通管制"
+    ],
+    "status": "verified",
+    "isFictional": true
+  },
+  {
+    "id": "hf-vendor-complaint",
+    "topicId": "harvest-festival",
+    "title": "攤商反映抽籤制度不公",
+    "summary": "部分攤商質疑攤位抽籤程序，主辦單位表示抽籤全程錄影並可供查閱。",
+    "occurredAt": "2026-04-20T10:00:00+08:00",
+    "publishedAt": "2026-04-20T20:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-hf-vendor-complaint-1",
+        "title": "豐收節攤位抽籤引爭議",
+        "url": "https://example.org/fictional/radio/hf-vendor-complaint-1",
+        "publisher": "海港廣播（虛構）",
+        "publishedAt": "2026-04-20T20:00:00+08:00"
+      },
+      {
+        "id": "src-hf-vendor-complaint-2",
+        "title": "抽籤程序說明整理",
+        "url": "https://example.org/fictional/obs/hf-vendor-complaint-2",
+        "publisher": "公民觀察站（虛構）",
+        "publishedAt": "2026-04-22T10:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "節慶",
+      "攤商",
+      "爭議"
+    ],
+    "status": "disputed",
+    "isFictional": true
+  },
+  {
+    "id": "ch-er-expansion",
+    "topicId": "cityview-hospital",
+    "title": "急診擴建完成啟用",
+    "summary": "城景醫院急診區擴建完成，觀察床位增加，醫院表示將同步增聘護理人力。",
+    "occurredAt": "2026-02-18T10:00:00+08:00",
+    "publishedAt": "2026-02-18T19:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-ch-er-expansion-1",
+        "title": "城景醫院急診擴建啟用",
+        "url": "https://example.org/fictional/tv/ch-er-expansion-1",
+        "publisher": "城市電視台（虛構）",
+        "publishedAt": "2026-02-18T19:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "醫療",
+      "急診"
+    ],
+    "status": "verified",
+    "isFictional": true
+  },
+  {
+    "id": "ch-wait-times",
+    "topicId": "cityview-hospital",
+    "title": "候診時間統計引發討論",
+    "summary": "民間團體公布候診時間統計，醫院回應統計期間包含流感高峰。",
+    "occurredAt": "2026-05-03T10:00:00+08:00",
+    "publishedAt": "2026-05-03T11:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-ch-wait-times-1",
+        "title": "急診候診時間統計",
+        "url": "https://example.org/fictional/obs/ch-wait-times-1",
+        "publisher": "公民觀察站（虛構）",
+        "publishedAt": "2026-05-03T11:00:00+08:00"
+      },
+      {
+        "id": "src-ch-wait-times-2",
+        "title": "醫院回應候診統計",
+        "url": "https://example.org/fictional/hd/ch-wait-times-2",
+        "publisher": "海港日報（虛構）",
+        "publishedAt": "2026-05-04T09:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "醫療",
+      "候診"
+    ],
+    "status": "disputed",
+    "isFictional": true
+  },
+  {
+    "id": "we-turbine-install",
+    "topicId": "windfield-energy",
+    "title": "陸域風機完成安裝",
+    "summary": "風原園區完成六座陸域風機安裝，預計下半年併網。",
+    "occurredAt": "2026-01-27T10:00:00+08:00",
+    "publishedAt": "2026-01-27T17:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-we-turbine-install-1",
+        "title": "風原園區風機安裝完成",
+        "url": "https://example.org/fictional/hd/we-turbine-install-1",
+        "publisher": "海港日報（虛構）",
+        "publishedAt": "2026-01-27T17:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "能源",
+      "風電"
+    ],
+    "status": "reported",
+    "isFictional": true
+  },
+  {
+    "id": "we-grid-connection",
+    "topicId": "windfield-energy",
+    "title": "太陽能案場完成併網",
+    "summary": "園區太陽能案場完成併網測試，地方回饋金分配方案同步公布。",
+    "occurredAt": "2026-04-28T10:00:00+08:00",
+    "publishedAt": "2026-04-28T15:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-we-grid-connection-1",
+        "title": "風原太陽能併網與回饋方案",
+        "url": "https://example.org/fictional/gov/we-grid-connection-1",
+        "publisher": "海港市政府新聞稿（虛構）",
+        "publishedAt": "2026-04-28T15:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "能源",
+      "太陽能"
+    ],
+    "status": "verified",
+    "isFictional": true
+  },
+  {
+    "id": "or-arcade-leveling",
+    "topicId": "oldtown-renewal",
+    "title": "騎樓整平工程第一期完工",
+    "summary": "舊城區第一期騎樓整平完工，行人通行空間改善，部分店家仍待協調。",
+    "occurredAt": "2026-02-08T10:00:00+08:00",
+    "publishedAt": "2026-02-08T16:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-or-arcade-leveling-1",
+        "title": "舊城騎樓整平一期完工",
+        "url": "https://example.org/fictional/hd/or-arcade-leveling-1",
+        "publisher": "海港日報（虛構）",
+        "publishedAt": "2026-02-08T16:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "都更",
+      "騎樓"
+    ],
+    "status": "verified",
+    "isFictional": true
+  },
+  {
+    "id": "or-heritage-debate",
+    "topicId": "oldtown-renewal",
+    "title": "老屋保存範圍意見分歧",
+    "summary": "文化團體與屋主對老屋保存範圍意見不同，市府表示將召開說明會。",
+    "occurredAt": "2026-05-18T10:00:00+08:00",
+    "publishedAt": "2026-05-18T20:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-or-heritage-debate-1",
+        "title": "舊城老屋保存範圍爭議",
+        "url": "https://example.org/fictional/radio/or-heritage-debate-1",
+        "publisher": "海港廣播（虛構）",
+        "publishedAt": "2026-05-18T20:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "都更",
+      "文化資產",
+      "爭議"
+    ],
+    "status": "disputed",
+    "isFictional": true
+  },
+  {
+    "id": "cl-storage-low",
+    "topicId": "cloudlake-reservoir",
+    "title": "水庫蓄水率降至警戒",
+    "summary": "雲湖水庫蓄水率下降，水利單位宣布部分地區夜間減壓供水。",
+    "occurredAt": "2026-03-12T10:00:00+08:00",
+    "publishedAt": "2026-03-12T14:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-cl-storage-low-1",
+        "title": "雲湖水庫供水調度公告",
+        "url": "https://example.org/fictional/gov/cl-storage-low-1",
+        "publisher": "海港市政府新聞稿（虛構）",
+        "publishedAt": "2026-03-12T14:00:00+08:00"
+      },
+      {
+        "id": "src-cl-storage-low-2",
+        "title": "夜間減壓供水懶人包",
+        "url": "https://example.org/fictional/tv/cl-storage-low-2",
+        "publisher": "城市電視台（虛構）",
+        "publishedAt": "2026-03-12T20:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "水資源",
+      "供水"
+    ],
+    "status": "verified",
+    "isFictional": true
+  },
+  {
+    "id": "cl-rain-recovery",
+    "topicId": "cloudlake-reservoir",
+    "title": "降雨後減壓措施解除",
+    "summary": "連日降雨後蓄水回升，水利單位宣布解除夜間減壓供水。",
+    "occurredAt": "2026-05-26T10:00:00+08:00",
+    "publishedAt": "2026-05-26T11:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-cl-rain-recovery-1",
+        "title": "解除減壓供水公告",
+        "url": "https://example.org/fictional/gov/cl-rain-recovery-1",
+        "publisher": "海港市政府新聞稿（虛構）",
+        "publishedAt": "2026-05-26T11:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "水資源",
+      "供水"
+    ],
+    "status": "reported",
+    "isFictional": true
+  },
+  {
+    "id": "gf-irrigation-upgrade",
+    "topicId": "goldfield-farm-market",
+    "title": "灌溉渠道改善完成",
+    "summary": "金田灌溉渠道改善完成，農會表示可減少漏水損失。",
+    "occurredAt": "2026-02-02T10:00:00+08:00",
+    "publishedAt": "2026-02-02T15:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-gf-irrigation-upgrade-1",
+        "title": "金田灌溉渠道改善",
+        "url": "https://example.org/fictional/hd/gf-irrigation-upgrade-1",
+        "publisher": "海港日報（虛構）",
+        "publishedAt": "2026-02-02T15:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "農業",
+      "灌溉"
+    ],
+    "status": "reported",
+    "isFictional": true
+  },
+  {
+    "id": "gf-market-launch",
+    "topicId": "goldfield-farm-market",
+    "title": "週末農夫市集開幕",
+    "summary": "週末農夫市集開幕，攤位以在地小農為主，主辦單位推動產銷履歷標示。",
+    "occurredAt": "2026-03-21T09:00:00+08:00",
+    "publishedAt": "2026-03-21T18:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-gf-market-launch-1",
+        "title": "金田農夫市集開幕",
+        "url": "https://example.org/fictional/radio/gf-market-launch-1",
+        "publisher": "海港廣播（虛構）",
+        "publishedAt": "2026-03-21T18:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "農業",
+      "市集"
+    ],
+    "status": "verified",
+    "isFictional": true
+  },
+  {
+    "id": "ha-traffic-plan",
+    "topicId": "harbor-arena",
+    "title": "巨蛋賽事散場交通計畫",
+    "summary": "大型賽事散場時段加開接駁車並延長捷運營運，周邊道路臨時管制。",
+    "occurredAt": "2026-03-07T10:00:00+08:00",
+    "publishedAt": "2026-03-07T16:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-ha-traffic-plan-1",
+        "title": "巨蛋散場交通計畫",
+        "url": "https://example.org/fictional/gov/ha-traffic-plan-1",
+        "publisher": "海港市政府新聞稿（虛構）",
+        "publishedAt": "2026-03-07T16:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "體育",
+      "交通"
+    ],
+    "status": "verified",
+    "isFictional": true
+  },
+  {
+    "id": "ha-roof-maintenance",
+    "topicId": "harbor-arena",
+    "title": "場館屋頂檢修延期",
+    "summary": "巨蛋屋頂檢修工程延期，營運單位表示不影響本季賽事。",
+    "occurredAt": "2026-05-09T10:00:00+08:00",
+    "publishedAt": "2026-05-09T19:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-ha-roof-maintenance-1",
+        "title": "巨蛋屋頂檢修延期",
+        "url": "https://example.org/fictional/tv/ha-roof-maintenance-1",
+        "publisher": "城市電視台（虛構）",
+        "publishedAt": "2026-05-09T19:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "體育",
+      "場館"
+    ],
+    "status": "reported",
+    "isFictional": true
+  },
+  {
+    "id": "sc-open-data",
+    "topicId": "smartcity-datacenter",
+    "title": "開放資料平台改版",
+    "summary": "市府開放資料平台改版，新增公車即時資料與資料下載統計。",
+    "occurredAt": "2026-01-16T10:00:00+08:00",
+    "publishedAt": "2026-01-16T14:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-sc-open-data-1",
+        "title": "開放資料平台改版說明",
+        "url": "https://example.org/fictional/gov/sc-open-data-1",
+        "publisher": "海港市政府新聞稿（虛構）",
+        "publishedAt": "2026-01-16T14:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "科技",
+      "開放資料"
+    ],
+    "status": "verified",
+    "isFictional": true
+  },
+  {
+    "id": "sc-security-drill",
+    "topicId": "smartcity-datacenter",
+    "title": "資安演練結果摘要公布",
+    "summary": "市府公布年度資安演練摘要，部分系統需在期限內完成修補。",
+    "occurredAt": "2026-04-11T10:00:00+08:00",
+    "publishedAt": "2026-04-11T17:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-sc-security-drill-1",
+        "title": "市府資安演練摘要",
+        "url": "https://example.org/fictional/hd/sc-security-drill-1",
+        "publisher": "海港日報（虛構）",
+        "publishedAt": "2026-04-11T17:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "科技",
+      "資安"
+    ],
+    "status": "reported",
+    "isFictional": true
+  },
+  {
+    "id": "nh-slope-sensors",
+    "topicId": "northhill-disaster-prep",
+    "title": "邊坡監測儀器完成布設",
+    "summary": "北嶺邊坡新增傾斜儀與雨量計，資料將即時回傳防災中心。",
+    "occurredAt": "2026-02-26T10:00:00+08:00",
+    "publishedAt": "2026-02-26T15:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-nh-slope-sensors-1",
+        "title": "北嶺邊坡監測系統上線",
+        "url": "https://example.org/fictional/gov/nh-slope-sensors-1",
+        "publisher": "海港市政府新聞稿（虛構）",
+        "publishedAt": "2026-02-26T15:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "防災",
+      "邊坡"
+    ],
+    "status": "verified",
+    "isFictional": true
+  },
+  {
+    "id": "nh-evacuation-drill",
+    "topicId": "northhill-disaster-prep",
+    "title": "山區疏散演練舉行",
+    "summary": "北嶺社區舉行疏散演練，居民反映部分避難路線標示不清。",
+    "occurredAt": "2026-05-30T09:00:00+08:00",
+    "publishedAt": "2026-05-30T17:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-nh-evacuation-drill-1",
+        "title": "北嶺疏散演練",
+        "url": "https://example.org/fictional/radio/nh-evacuation-drill-1",
+        "publisher": "海港廣播（虛構）",
+        "publishedAt": "2026-05-30T17:00:00+08:00"
+      },
+      {
+        "id": "src-nh-evacuation-drill-2",
+        "title": "避難路線標示意見整理",
+        "url": "https://example.org/fictional/obs/nh-evacuation-drill-2",
+        "publisher": "公民觀察站（虛構）",
+        "publishedAt": "2026-06-01T10:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "防災",
+      "演練"
+    ],
+    "status": "reported",
+    "isFictional": true
   }
 ]

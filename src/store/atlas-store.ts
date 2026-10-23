@@ -2,10 +2,12 @@ import { create } from "zustand";
 import { datasetResult } from "@/lib/data";
 import { EMPTY_FILTERS, filterEvents, type AtlasData, type EventFilters } from "@/lib/normalize";
 import type { QualityPreference } from "@/lib/quality";
+import type { TimeOfDay } from "@/lib/time-of-day";
 import type { UrlState } from "@/lib/url-state";
 
 export type SceneStatus = "loading" | "ready" | "error" | "context-lost";
 export type CameraMode = "overview" | "focusing" | "focused" | "returning";
+export type DialogKind = "none" | "onboarding" | "help" | "about";
 
 export interface SelectionState {
   selectedTopicId: string | null;
@@ -52,6 +54,20 @@ interface AtlasState extends SelectionState {
   hoveredEventId: string | null;
   cameraMode: CameraMode;
   sheetExpanded: boolean;
+  /** Purely atmospheric lighting preset. */
+  timeOfDay: TimeOfDay;
+  /** Draw every curated relation, not only those of the selected event. */
+  showAllRelations: boolean;
+  /** Pause idle animations (train, smoke, particles). */
+  animationsPaused: boolean;
+  /** Near top-down overview camera. */
+  birdseye: boolean;
+  /** Guided tour cycling through tiles. */
+  touring: boolean;
+  indexOpen: boolean;
+  overviewOpen: boolean;
+  timelineOpen: boolean;
+  dialog: DialogKind;
   qualityPreference: QualityPreference;
   sceneStatus: SceneStatus;
   /** Monotonic counter; CameraDirector flies to the canonical overview whenever it changes. */
@@ -72,6 +88,15 @@ interface AtlasState extends SelectionState {
   applyUrlState: (state: UrlState) => void;
   setCameraMode: (mode: CameraMode) => void;
   setSheetExpanded: (expanded: boolean) => void;
+  setTimeOfDay: (time: TimeOfDay) => void;
+  toggleRelations: () => void;
+  toggleAnimations: () => void;
+  toggleBirdseye: () => void;
+  setTouring: (touring: boolean) => void;
+  setIndexOpen: (open: boolean) => void;
+  setOverviewOpen: (open: boolean) => void;
+  setTimelineOpen: (open: boolean) => void;
+  setDialog: (dialog: DialogKind) => void;
   setQualityPreference: (preference: QualityPreference) => void;
   setSceneStatus: (status: SceneStatus) => void;
   /** With a selection: clear it (camera returns to the previous orbit). Without: canonical overview. */
@@ -96,6 +121,15 @@ export const useAtlasStore = create<AtlasState>()((set, get) => {
     hoveredEventId: null,
     cameraMode: "overview",
     sheetExpanded: false,
+    timeOfDay: "night",
+    showAllRelations: false,
+    animationsPaused: false,
+    birdseye: false,
+    touring: false,
+    indexOpen: true,
+    overviewOpen: false,
+    timelineOpen: false,
+    dialog: "none",
     qualityPreference: "auto",
     sceneStatus: "loading",
     overviewRequest: 0,
@@ -134,12 +168,21 @@ export const useAtlasStore = create<AtlasState>()((set, get) => {
       if (get().cameraMode !== cameraMode) set({ cameraMode });
     },
     setSheetExpanded: (sheetExpanded) => set({ sheetExpanded }),
+    setTimeOfDay: (timeOfDay) => set({ timeOfDay }),
+    toggleRelations: () => set((s) => ({ showAllRelations: !s.showAllRelations })),
+    toggleAnimations: () => set((s) => ({ animationsPaused: !s.animationsPaused })),
+    toggleBirdseye: () => set((s) => ({ birdseye: !s.birdseye, selectedTopicId: null, selectedEventId: null, touring: false })),
+    setTouring: (touring) => set({ touring }),
+    setIndexOpen: (indexOpen) => set({ indexOpen }),
+    setOverviewOpen: (overviewOpen) => set({ overviewOpen }),
+    setTimelineOpen: (timelineOpen) => set({ timelineOpen }),
+    setDialog: (dialog) => set({ dialog }),
     setQualityPreference: (qualityPreference) => set({ qualityPreference, sceneStatus: "loading" }),
     setSceneStatus: (sceneStatus) => set({ sceneStatus }),
     requestOverview: () => {
       const s = get();
-      if (s.selectedTopicId || s.selectedEventId) set({ selectedTopicId: null, selectedEventId: null });
-      else set({ overviewRequest: s.overviewRequest + 1 });
+      if (s.selectedTopicId || s.selectedEventId) set({ selectedTopicId: null, selectedEventId: null, touring: false });
+      else set({ overviewRequest: s.overviewRequest + 1, birdseye: false, touring: false });
     },
     retryScene: () => set((s) => ({ sceneStatus: "loading", sceneGeneration: s.sceneGeneration + 1 })),
   };

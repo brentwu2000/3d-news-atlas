@@ -1,7 +1,13 @@
 # 3D News Atlas
 
-Interactive 3D atlas of news topics rendered as floating islands. See `CLAUDE.md` for the full spec.
-**Status: P0-P5 done except real-device performance measurement; POLISH-V1 steps 1-6 done (see `docs/POLISH-V1-REPORT.md`).** Data is local, fictional, clearly labelled sample content; no backend, no news API.
+Interactive 3D news-event map. Nineteen hexagonal tiles form one fictional city ("海港市"): one tile per topic,
+cyan beacons for events, red dashed arcs for curated relations. See `CLAUDE.md` for the base spec.
+
+**Status:** P0-P5 done. Visual/interaction direction since v2: a hex-tile diorama city at night with time-of-day lighting
+and an editorial paper UI (brand card, toolbar, event index, legend card, overview, timeline, onboarding). The look was
+matched to a reference site by independent implementation only: no code, models, images, brand or characters were copied,
+and the reference's "danger level" rating was deliberately not reproduced (colour/size must never imply severity).
+All data is fictional, clearly labelled sample content; no backend, no news API, no tracking.
 
 ## Scripts (npm)
 
@@ -16,7 +22,7 @@ Interactive 3D atlas of news topics rendered as floating islands. See `CLAUDE.md
 | `npm run build:static` | Static export to `out/` (`output: "export"`, enabled only for this script) |
 | `npm run deploy` | `build:static` + `wrangler deploy` to Cloudflare (Workers static assets, `wrangler.jsonc`) |
 
-QA URL switches: `?webgl=0` forces the 2D fallback; `?quality=low|high` overrides auto-detected quality;
+QA URL switches: `?webgl=0` forces the 2D fallback; `?quality=low|high` overrides auto-detected quality; `?intro=0` skips onboarding;
 `?debug=1` shows live FPS / draw calls / triangles and exposes `window.__ATLAS_STATS__`.
 
 Performance + screenshot capture: `npm run build && npx next start -p 3100`, then
@@ -49,24 +55,26 @@ Version notes / deviations from "latest":
 
 ```
 src/
-  app/            layout.tsx, page.tsx (static; renders AtlasApp or DataErrorState), globals.css (art + UI tokens)
+  app/            layout.tsx (next/font: Noto Serif TC + IBM Plex Mono), page.tsx (static), globals.css (paper/ink tokens)
   components/
-    AtlasApp.tsx  client root (server-rendered): header, nav, canvas, drawer/sheet, timeline,
-                  URL sync (history.replaceState), Escape handling, focus restore
-    atlas/        AtlasClient (WebGL detection, quality, fallback), WorldScene (dynamic ssr:false, single Canvas),
-                  Island, EventMarker (instanced markers + invisible hit proxies), RelationArc, CameraDirector,
-                  DebugBridge + PerfProbe (?debug=1 only), materials, SceneErrorBoundary, WebGLFallback (2D buttons)
-    ui/           Filters (search + category chips), EventNavigator (keyboard list), EventPanel, Timeline, DataErrorState
-  lib/            schema (Zod), data (safe load), normalize (indices + filtering), timeline, url-state, camera,
-                  markers, gestures, labels, island-generator, island-geometry, layout, art-tokens, color,
-                  particles, quality, webgl, hooks, random
+    AtlasApp.tsx  client root (server-rendered): map overlays, index sidebar / mobile sheet, detail card, dialogs,
+                  URL sync, Escape handling, focus restore, guided tour
+    atlas/        AtlasClient (WebGL detection, quality, fallback), WorldScene (single Canvas; world model, lights, fog),
+                  CityMeshes (all tiles instanced: slab, ground, road, kerb, dashes, lamps, prop groups + picking),
+                  EventMarker (instanced beacons + hit proxies), TileOverlays (number pills, dashed outlines),
+                  RelationArc, Surroundings (forest, hills, rail + train, smoke), CameraDirector, DebugBridge, PerfProbe,
+                  materials (shared; window texture; time-of-day glow), WebGLFallback (2D hex buttons)
+    ui/           Chrome (brand card, hero, toolbar, side buttons, quick-jump, hint), EventIndex, EventPanel (legend/event
+                  card), OverviewCard, Timeline (filters + histogram + scrubber), Dialogs (onboarding/help/about), Filters, icons
+  lib/            schema, data, normalize, timeline, url-state, camera, hex, layout, tile-generator, city-geometry,
+                  markers, environment, time-of-day, palette, labels, gestures, particles, quality, webgl, hooks, random, color
   store/          atlas-store (zustand; pure `transitions` are unit-tested)
-  data/           topics.json (5), events.json (17), relations.json (8) — all fictional
-tests/unit (Vitest), tests/e2e (Playwright: smoke + interaction)
+  data/           topics.json (19), events.json (47), relations.json (16) — all fictional
+tests/unit (Vitest), tests/e2e (Playwright: smoke + interaction; fixtures.ts skips onboarding except in its own test)
 ```
 
 ### Data model notes
-Matches CLAUDE.md, with three additive fields needed for editorial safety:
+Matches CLAUDE.md, with four additive fields: `Topic.shortTitle` (tile label), and for editorial safety:
 `Source.id` (so `Relation.sourceIds` can cite a specific source), `Event.correctionNote` (required when status is `corrected`),
 `Event.isFictional`. Dates must be ISO 8601 **with time and offset**; date-only, offset-less and impossible dates are rejected.
 URLs must be absolute http(s). `causal_claim` relations must cite at least one source belonging to one of the two events.
@@ -78,12 +86,14 @@ data-error page with the issues instead of a broken atlas. Days are bucketed in 
   the list, the 3D markers and the timeline, so they can never disagree. Filtering out the selected event deselects it.
 - Camera states `overview → focusing → focused → returning`, owned by `CameraDirector` only. GSAP tweens start from the
   current pose, are killed on every new request, on user input and on unmount, and snap onto the deterministic pose on
-  completion (0.9-1.3 s window, 1.1 s, power2.inOut; immediate with reduced motion). Focus frames the island at 45 %
-  (desktop) / 40 % (mobile) of canvas width, centred in the area not covered by the drawer. Returning restores the user's
+  completion (0.9-1.3 s window, 1.1 s, power2.inOut; immediate with reduced motion). Focus frames the tile at 50 %
+  (desktop) / 42 % (mobile) of canvas width, centred in the area not covered by the detail card. Returning restores the user's
   previous orbit if it is still within orbit limits, otherwise the canonical overview.
 - Clicks with pointer travel >= 6 CSS px are ignored (orbit/pan/pinch). Marker hits stop propagation, so they win over islands.
-  Hover shows an outline ribbon (own material) + cursor; nothing mutates shared materials or geometry.
-- Islands stop bobbing while anything is selected (stable picking and arcs). Selecting anything pauses the timeline.
+  Hover/selection show a white/red dashed hex outline + cursor; nothing mutates shared materials or geometry.
+  Number pills over the tiles use the same 6 px tap threshold, since they move with the camera while orbiting.
+- Tiles are static (no bobbing); idle life comes from the train, chimney smoke and fireflies, all paused by "暫停",
+  under reduced motion, and while the tab is hidden. Selecting anything pauses the timeline and the guided tour.
 - Keyboard: every island/marker pick has a list button; Enter opens, Escape closes the event, then the topic; focus moves to the
   panel heading on open and back to the list item on close. Range input + play/pause for the timeline.
 - URL: `topic`, `event`, `until` (YYYY-MM-DD), `q`, `cat` (comma list). Parsed once after hydration (no hydration mismatch),
@@ -92,18 +102,21 @@ data-error page with the issues instead of a broken atlas. Days are bucketed in 
 QA switches (not part of shareable state): `?webgl=0`, `?quality=low|high`, `?debug=1` (stats overlay,
 `window.__ATLAS_STATS__`, `window.__ATLAS_DEBUG__` used by E2E to aim pointer events at 3D objects).
 
-## Scalability limits (measured with 5 topics / 17 events / 8 relations)
+## Scalability limits (measured with 19 topics / 47 events / 16 relations)
 
-- Layout: ring for <= 7 topics, phyllotaxis spiral beyond; unit-tested non-overlapping up to 50 topics. On-screen silhouette
-  overlap is only verified for the bundled 5-topic fixture.
-- Per island: ~12-16 draw calls (terrain, base, <= 14 instanced prop groups, 2 marker meshes) + 1 DOM label. Markers are
-  instanced per island, so events add no draw calls. Marker layout prefers >= 1.6 units spacing, relaxing to >= 0.95
-  for crowded islands; clean spacing is unit-tested up to 24 events per island (`MARKER_CAPACITY`). Beyond that markers
-  may overlap — clustering would be needed.
+- Layout: hexagonal spiral (1, 7, 19, 37… tiles); camera framing is unit-tested for the bundled 19 tiles.
+- Rendering is instanced across the whole city: ~45-60 draw calls regardless of tile or event count (prop groups are
+  keyed by primitive × material × shadow). Each tile adds one DOM number label (drei `Html`); beyond ~40 tiles labels
+  should switch to an instanced/text-atlas approach.
+- Beacons: spacing >= 1.5 units for the bundled data, relaxed to >= 0.9 and unit-tested up to 16 events per tile
+  (`MARKER_CAPACITY`); beyond that beacons may overlap and clustering would be needed.
 - Search is a linear scan over pre-lowercased text: fine for thousands of events, not for a large archive.
-- Beyond ~30 islands, labels and per-island meshes should move to LOD / merged instancing.
+- Performance (headless Chromium + SwiftShader, i.e. CPU rendering): desktop 1440×900 ≈ 10 fps high / 17 fps low,
+  59 draw calls, 55k triangles; mobile 390×844 low preset 60 fps (capped), 46 calls, 44k triangles. The full-screen
+  lit city is fill-rate bound on a CPU renderer; real GPUs have not been measured yet — use `?debug=1` on a device.
+  Screenshots: `docs/screenshots/v2-city/`.
 
-## POLISH-V1 (steps 1-3)
+## History: POLISH-V1 (floating-island version, superseded by the v2 hex city)
 
 - **Palette tokens**: `--atlas-backdrop/stone/sand/foliage/highlight` in `globals.css` (also exposed as Tailwind `atlas-*` colours).
   The scene reads them at runtime (`readArtTokens`) and derives every colour via `deriveSwatches` in `src/lib/art-tokens.ts`.

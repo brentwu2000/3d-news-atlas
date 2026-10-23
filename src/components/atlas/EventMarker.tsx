@@ -1,118 +1,126 @@
 "use client";
 
 import type { ThreeEvent } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
 import { useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
-import type { ArtSwatches } from "@/lib/art-tokens";
 import { isTap } from "@/lib/gestures";
-import { MARKER_HEAD_SIZE, MARKER_HIT_RADIUS, type MarkerPlacement } from "@/lib/markers";
+import type { Vec3 } from "@/lib/tile-generator";
+import { BEACON_RADIUS, BEAM_HEIGHT, MARKER_HIT_RADIUS } from "@/lib/markers";
 import { useAtlasStore } from "@/store/atlas-store";
-import { getMarkerHaloMaterial, getMarkerHeadMaterial, getMarkerStemMaterial } from "./materials";
+import { getBeaconBeamMaterial, getBeaconHitMaterial, getBeaconRingMaterial, getHaloMaterial } from "./materials";
 
 /*
- * All markers of one island are drawn with three InstancedMeshes (stem, head,
- * invisible hit proxy) so the cost is constant per island, not per event.
- * Every marker looks identical: neither colour nor size encodes status.
+ * Every visible event beacon in the city, drawn with three InstancedMeshes
+ * (ground ring, light beam, invisible hit proxy). All beacons look the same:
+ * neither colour nor size encodes status or importance.
  */
 
-let headGeometry: THREE.BufferGeometry | null = null;
-let stemGeometry: THREE.BufferGeometry | null = null;
+let ringGeometry: THREE.BufferGeometry | null = null;
+let beamGeometry: THREE.BufferGeometry | null = null;
 let hitGeometry: THREE.BufferGeometry | null = null;
 let haloGeometry: THREE.BufferGeometry | null = null;
 
 function geometries() {
-  headGeometry ??= new THREE.OctahedronGeometry(MARKER_HEAD_SIZE, 0);
-  stemGeometry ??= new THREE.CylinderGeometry(0.04, 0.04, 1, 5).translate(0, 0.5, 0);
+  ringGeometry ??= new THREE.TorusGeometry(BEACON_RADIUS, 0.07, 3, 18).rotateX(Math.PI / 2);
+  beamGeometry ??= new THREE.CylinderGeometry(0.12, BEACON_RADIUS * 0.9, BEAM_HEIGHT, 10, 1, true).translate(0, BEAM_HEIGHT / 2, 0);
   hitGeometry ??= new THREE.SphereGeometry(MARKER_HIT_RADIUS, 8, 6);
-  haloGeometry ??= new THREE.TorusGeometry(MARKER_HEAD_SIZE * 1.7, 0.06, 6, 24).rotateX(Math.PI / 2);
-  return { head: headGeometry, stem: stemGeometry, hit: hitGeometry, halo: haloGeometry };
+  haloGeometry ??= new THREE.TorusGeometry(BEACON_RADIUS * 1.7, 0.06, 4, 32).rotateX(Math.PI / 2);
+  return { ring: ringGeometry, beam: beamGeometry, hit: hitGeometry, halo: haloGeometry };
 }
 
 const tmp = new THREE.Object3D();
 
-interface EventMarkersProps {
-  /** Only the currently visible (filtered) markers, in stable order. */
-  markers: readonly MarkerPlacement[];
-  selectedEventId: string | null;
-  hoveredEventId: string | null;
-  swatches: ArtSwatches;
+export interface BeaconInstance {
+  eventId: string;
+  /** World position of the beam centre (pick target). */
+  head: Vec3;
 }
 
-export function EventMarkers({ markers, selectedEventId, hoveredEventId, swatches }: EventMarkersProps) {
-  const headRef = useRef<THREE.InstancedMesh>(null);
-  const stemRef = useRef<THREE.InstancedMesh>(null);
+interface BeaconsProps {
+  beacons: readonly BeaconInstance[];
+  selectedEventId: string | null;
+  hoveredEventId: string | null;
+  animate: boolean;
+}
+
+export function Beacons({ beacons, selectedEventId, hoveredEventId, animate }: BeaconsProps) {
+  const ringRef = useRef<THREE.InstancedMesh>(null);
+  const beamRef = useRef<THREE.InstancedMesh>(null);
   const hitRef = useRef<THREE.InstancedMesh>(null);
+  const haloRef = useRef<THREE.Mesh>(null);
   const g = geometries();
-  const capacity = Math.max(1, markers.length);
+  const capacity = Math.max(1, beacons.length);
 
   useLayoutEffect(() => {
-    const head = headRef.current;
-    const stem = stemRef.current;
-    const hit = hitRef.current;
-    if (!head || !stem || !hit) return;
-    markers.forEach((m, i) => {
-      tmp.position.set(...m.head);
-      tmp.rotation.set(0, 0, 0);
+    const meshes = [ringRef.current, beamRef.current, hitRef.current];
+    beacons.forEach((b, i) => {
+      tmp.position.set(b.head[0], 0.07, b.head[2]);
       tmp.scale.set(1, 1, 1);
       tmp.updateMatrix();
-      head.setMatrixAt(i, tmp.matrix);
-      hit.setMatrixAt(i, tmp.matrix);
-      const stemHeight = Math.max(0.1, m.head[1] - m.groundY - MARKER_HEAD_SIZE);
-      tmp.position.set(m.head[0], m.groundY, m.head[2]);
-      tmp.scale.set(1, stemHeight, 1);
+      ringRef.current?.setMatrixAt(i, tmp.matrix);
+      beamRef.current?.setMatrixAt(i, tmp.matrix);
+      tmp.position.set(...b.head);
       tmp.updateMatrix();
-      stem.setMatrixAt(i, tmp.matrix);
+      hitRef.current?.setMatrixAt(i, tmp.matrix);
     });
-    for (const mesh of [head, stem, hit]) {
-      mesh.count = markers.length;
+    for (const mesh of meshes) {
+      if (!mesh) continue;
+      mesh.count = beacons.length;
       mesh.instanceMatrix.needsUpdate = true;
       mesh.computeBoundingSphere();
     }
-  }, [markers]);
+  }, [beacons]);
 
-  // Selected marker wins; otherwise show the hovered one (if it lives on this island).
+  // Selected beacon wins; otherwise the hovered one.
   const halo = useMemo(() => {
-    const haloId = markers.some((m) => m.eventId === selectedEventId) ? selectedEventId : hoveredEventId;
-    return markers.find((m) => m.eventId === haloId);
-  }, [markers, selectedEventId, hoveredEventId]);
+    const id = beacons.some((b) => b.eventId === selectedEventId) ? selectedEventId : hoveredEventId;
+    return beacons.find((b) => b.eventId === id);
+  }, [beacons, selectedEventId, hoveredEventId]);
 
-  const idAt = (e: ThreeEvent<PointerEvent | MouseEvent>) => (e.instanceId === undefined ? undefined : markers[e.instanceId]?.eventId);
+  // Gentle halo pulse (disabled with reduced motion / paused animations).
+  useFrame(({ clock }) => {
+    const mesh = haloRef.current;
+    if (!mesh) return;
+    const s = animate ? 1 + Math.sin(clock.elapsedTime * 3) * 0.12 : 1;
+    mesh.scale.set(s, 1, s);
+  });
 
-  const onClick = (e: ThreeEvent<MouseEvent>) => {
-    // Marker picks take priority over the parent island.
-    e.stopPropagation();
-    if (!isTap(e.delta)) return;
-    const id = idAt(e);
-    if (id) useAtlasStore.getState().selectEvent(id);
-  };
-  const onOver = (e: ThreeEvent<PointerEvent>) => {
-    e.stopPropagation();
-    const id = idAt(e);
-    if (id) useAtlasStore.getState().hoverEvent(id);
-    document.body.style.cursor = "pointer";
-  };
-  const onOut = (e: ThreeEvent<PointerEvent>) => {
-    e.stopPropagation();
-    useAtlasStore.getState().hoverEvent(null);
-    document.body.style.cursor = "";
-  };
+  const idAt = (e: ThreeEvent<PointerEvent | MouseEvent>) => (e.instanceId === undefined ? undefined : beacons[e.instanceId]?.eventId);
 
   return (
-    <group name="markers">
-      <instancedMesh ref={stemRef} args={[g.stem, getMarkerStemMaterial(swatches.stoneLight), capacity]} dispose={null} />
-      <instancedMesh ref={headRef} args={[g.head, getMarkerHeadMaterial(swatches.highlight), capacity]} dispose={null} />
+    <group name="beacons">
+      <instancedMesh ref={ringRef} args={[g.ring, getBeaconRingMaterial(), capacity]} raycast={() => null} dispose={null} />
+      <instancedMesh ref={beamRef} args={[g.beam, getBeaconBeamMaterial(), capacity]} raycast={() => null} renderOrder={2} dispose={null} />
       {/* Invisible but raycastable (three's Raycaster ignores `visible`); costs no draw call. */}
       <instancedMesh
         ref={hitRef}
-        name="marker-hits"
-        args={[g.hit, getMarkerHeadMaterial(swatches.highlight), capacity]}
+        name="beacon-hits"
+        args={[g.hit, getBeaconHitMaterial(), capacity]}
         visible={false}
-        onClick={onClick}
-        onPointerOver={onOver}
-        onPointerOut={onOut}
+        onClick={(e) => {
+          // Beacon picks take priority over the tile underneath.
+          e.stopPropagation();
+          if (!isTap(e.delta)) return;
+          const id = idAt(e);
+          if (id) useAtlasStore.getState().selectEvent(id);
+        }}
+        onPointerOver={(e) => {
+          e.stopPropagation();
+          const id = idAt(e);
+          if (id) useAtlasStore.getState().hoverEvent(id);
+          document.body.style.cursor = "pointer";
+        }}
+        onPointerOut={(e) => {
+          e.stopPropagation();
+          useAtlasStore.getState().hoverEvent(null);
+          document.body.style.cursor = "";
+        }}
         dispose={null}
       />
-      {halo && <mesh geometry={g.halo} material={getMarkerHaloMaterial(swatches.highlight)} position={halo.head} dispose={null} />}
+      {halo && (
+        <mesh ref={haloRef} geometry={g.halo} material={getHaloMaterial()} position={[halo.head[0], 0.09, halo.head[2]]} raycast={() => null} dispose={null} />
+      )}
     </group>
   );
 }

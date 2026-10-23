@@ -3,13 +3,13 @@
 import { useThree } from "@react-three/fiber";
 import { useEffect } from "react";
 import * as THREE from "three";
-import type { Vec3 } from "@/lib/island-generator";
+import type { Vec3 } from "@/lib/tile-generator";
 import type { WorldModel } from "./WorldScene";
 
 export interface AtlasDebugApi {
-  /** CSS-pixel point (page coordinates) of an island's top centre, or null. */
+  /** CSS-pixel point (page coordinates) on a tile's open ground near its centre, or null. */
   islandScreenPoint(topicId: string): { x: number; y: number } | null;
-  /** CSS-pixel point of an event marker head, or null if not rendered/visible. */
+  /** CSS-pixel point of an event beacon, or null if not rendered/visible. */
   markerScreenPoint(eventId: string): { x: number; y: number } | null;
   cameraPose(): { position: Vec3; target: Vec3 };
   visibleMarkerIds(): string[];
@@ -25,7 +25,6 @@ declare global {
 export function DebugBridge({ world, visibleIds }: { world: WorldModel; visibleIds: ReadonlySet<string> }) {
   const camera = useThree((s) => s.camera);
   const gl = useThree((s) => s.gl);
-  const scene = useThree((s) => s.scene);
   const controls = useThree((s) => s.controls) as unknown as { target?: THREE.Vector3 } | null;
 
   useEffect(() => {
@@ -37,20 +36,16 @@ export function DebugBridge({ world, visibleIds }: { world: WorldModel; visibleI
     };
     window.__ATLAS_DEBUG__ = {
       islandScreenPoint(topicId) {
-        const island = scene.getObjectByName(`island:${topicId}`);
-        if (!island) return null;
-        // Slightly above the rim plane so the ray hits terrain, not a marker.
-        return toPage(island.getWorldPosition(new THREE.Vector3()).add(new THREE.Vector3(0, 0.3, 0)));
+        const p = world.placements.find((pl) => pl.topicId === topicId);
+        if (!p) return null;
+        // Road ring near the tile's east corner: always tile geometry, never a beacon,
+        // a tall prop or the number label (which sits at the front edge).
+        return toPage(new THREE.Vector3(p.x + p.radius * 0.86, 0.03, p.z));
       },
       markerScreenPoint(eventId) {
         if (!visibleIds.has(eventId)) return null;
-        for (const [topicId, list] of world.markers) {
-          const marker = list.find((m) => m.eventId === eventId);
-          if (!marker) continue;
-          const island = scene.getObjectByName(`island:${topicId}`);
-          return island ? toPage(island.localToWorld(new THREE.Vector3(...marker.head))) : null;
-        }
-        return null;
+        const head = world.markerWorld.get(eventId);
+        return head ? toPage(new THREE.Vector3(...head)) : null;
       },
       cameraPose() {
         const t = controls?.target ?? new THREE.Vector3();
@@ -63,7 +58,7 @@ export function DebugBridge({ world, visibleIds }: { world: WorldModel; visibleI
     return () => {
       delete window.__ATLAS_DEBUG__;
     };
-  }, [camera, gl, scene, controls, world, visibleIds]);
+  }, [camera, gl, controls, world, visibleIds]);
 
   return null;
 }

@@ -1,0 +1,53 @@
+/**
+ * Scene albedo palette. Purely aesthetic: colours never encode editorial
+ * meaning (status, truth, severity). Lighting per time of day is applied on
+ * top of these (see time-of-day.ts).
+ */
+export const PALETTE = {
+  tile: "#b8b4cc",
+  tileSide: "#6f6a8a",
+  road: "#34343f",
+  roadLine: "#f2efe6",
+  curb: "#d9d5e6",
+  ground: "#4b5a3c",
+  grass: "#7fa05a",
+  grassDark: "#5d7d43",
+  sand: "#e3cf9f",
+  water: "#4e9fb6",
+  waterDeep: "#2f6f8a",
+  plaza: "#ddd6c8",
+  asphalt: "#4a4a57",
+  wallCream: "#efe7d6",
+  wallWhite: "#f5f3ee",
+  wallNavy: "#2f3653",
+  wallBlue: "#4d6fa6",
+  wallGrey: "#9a9cab",
+  wallBrick: "#a5533f",
+  wallTeal: "#3f8e8a",
+  roofYellow: "#e2b93b",
+  roofRed: "#c2412f",
+  roofDark: "#3b3b4a",
+  roofTeal: "#2f7f86",
+  accentRed: "#d0402f",
+  accentPink: "#e889b5",
+  accentYellow: "#f2c94c",
+  accentOrange: "#ef8a2f",
+  metal: "#c7ccd6",
+  metalDark: "#6b7080",
+  trunk: "#6b4a2f",
+  tree: "#2f6b43",
+  treeLight: "#4e8f4f",
+  treeDark: "#23543a",
+  rock: "#8c8a86",
+  lamp: "#ffd36b",
+  beacon: "#5fe3ff",
+  window: "#ffd977",
+  rail: "#3c3a4a",
+  railPillar: "#585669",
+  train: "#e6e2d6",
+  trainStripe: "#c2412f",
+  smoke: "#55525e",
+  hill: "#33402f",
+} as const;
+
+export type PaletteKey = keyof typeof PALETTE;

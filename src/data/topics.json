@@ -1,7 +1,8 @@
 [
   {
     "id": "harborton-light-rail",
-    "title": "【虛構範例】海港市輕軌延伸計畫",
+    "shortTitle": "輕軌延伸",
+    "title": "輕軌東延線計畫",
     "description": "虛構城市「海港市」的輕軌延伸路線規劃、公聽會與施工進度。此為測試用的虛構題材，並非真實新聞。",
     "category": "城市交通",
     "seed": 1029384756,
@@ -10,7 +11,8 @@
   },
   {
     "id": "greenridge-reforestation",
-    "title": "【虛構範例】青嶺林區復育行動",
+    "shortTitle": "林區復育",
+    "title": "青嶺林區復育行動",
     "description": "虛構林區「青嶺」的造林、物種調查與志工活動紀錄。此為測試用的虛構題材，並非真實新聞。",
     "category": "環境",
     "seed": 2837465190,
@@ -19,7 +21,8 @@
   },
   {
     "id": "northbay-industrial-transition",
-    "title": "【虛構範例】北灣工業區轉型",
+    "shortTitle": "工業轉型",
+    "title": "北灣工業區轉型",
     "description": "虛構「北灣工業區」的能源轉換、廠區更新與勞工訓練計畫。此為測試用的虛構題材，並非真實新聞。",
     "category": "產業",
     "seed": 384756102,
@@ -28,7 +31,8 @@
   },
   {
     "id": "silversand-coast-monitoring",
-    "title": "【虛構範例】銀沙海岸侵蝕監測",
+    "shortTitle": "海岸監測",
+    "title": "銀沙海岸侵蝕監測",
     "description": "虛構「銀沙海岸」的海岸線監測、防護工程與社區討論。此為測試用的虛構題材，並非真實新聞。",
     "category": "氣候",
     "seed": 3141592653,
@@ -37,10 +41,152 @@
   },
   {
     "id": "central-council-budget",
-    "title": "【虛構範例】中央議會年度預算審議",
+    "shortTitle": "預算審議",
+    "title": "中央議會年度預算審議",
     "description": "虛構「中央議會」的年度預算審議流程、修正案與表決紀錄。此為測試用的虛構題材，並非真實新聞。",
     "category": "公共政策",
     "seed": 2718281828,
-    "theme": "civic"
+    "theme": "civic",
+    "locationLabel": "中央議會（虛構）"
+  },
+  {
+    "id": "harbor-logistics",
+    "shortTitle": "港口物流",
+    "title": "海港貨櫃碼頭擴建",
+    "description": "虛構碼頭的擴建工程、貨櫃吞吐量與周邊交通調整。此為測試用的虛構題材，並非真實新聞。",
+    "category": "產業",
+    "seed": 1618033988,
+    "theme": "port",
+    "locationLabel": "海港碼頭（虛構）"
+  },
+  {
+    "id": "lantern-night-market",
+    "shortTitle": "夜市整頓",
+    "title": "燈籠夜市環境整頓",
+    "description": "虛構夜市的攤位重劃、衛生稽查與周邊停車問題。此為測試用的虛構題材，並非真實新聞。",
+    "category": "商業",
+    "seed": 1414213562,
+    "theme": "market",
+    "locationLabel": "燈籠夜市（虛構）"
+  },
+  {
+    "id": "jade-river-cleanup",
+    "shortTitle": "河川整治",
+    "title": "玉帶溪整治工程",
+    "description": "虛構溪流的水質監測、護岸工程與親水步道規劃。此為測試用的虛構題材，並非真實新聞。",
+    "category": "環境",
+    "seed": 1732050807,
+    "theme": "river",
+    "locationLabel": "玉帶溪（虛構）"
+  },
+  {
+    "id": "maple-school-safety",
+    "shortTitle": "校園安全",
+    "title": "楓林國小通學安全",
+    "description": "虛構小學周邊的通學步道、校門口交通與安全演練。此為測試用的虛構題材，並非真實新聞。",
+    "category": "教育",
+    "seed": 2236067977,
+    "theme": "school",
+    "locationLabel": "楓林國小（虛構）"
+  },
+  {
+    "id": "eastgate-social-housing",
+    "shortTitle": "社宅興建",
+    "title": "東門社會住宅興建",
+    "description": "虛構社會住宅的招標、施工與入住申請。此為測試用的虛構題材，並非真實新聞。",
+    "category": "住宅",
+    "seed": 2645751311,
+    "theme": "housing",
+    "locationLabel": "東門（虛構）"
+  },
+  {
+    "id": "harvest-festival",
+    "shortTitle": "文化節慶",
+    "title": "海港豐收節",
+    "description": "虛構年度節慶的活動安排、人流管制與攤商管理。此為測試用的虛構題材，並非真實新聞。",
+    "category": "文化",
+    "seed": 3316624790,
+    "theme": "fair",
+    "locationLabel": "海港公園（虛構）"
+  },
+  {
+    "id": "cityview-hospital",
+    "shortTitle": "醫療院所",
+    "title": "城景醫院急診擴充",
+    "description": "虛構醫院的急診擴建、候診時間與人力配置。此為測試用的虛構題材，並非真實新聞。",
+    "category": "醫療",
+    "seed": 3605551275,
+    "theme": "hospital",
+    "locationLabel": "城景醫院（虛構）"
+  },
+  {
+    "id": "windfield-energy",
+    "shortTitle": "再生能源",
+    "title": "風原再生能源園區",
+    "description": "虛構園區的風機與太陽能設置、併網與地方回饋。此為測試用的虛構題材，並非真實新聞。",
+    "category": "能源",
+    "seed": 2449489742,
+    "theme": "energy",
+    "locationLabel": "風原（虛構）"
+  },
+  {
+    "id": "oldtown-renewal",
+    "shortTitle": "舊城改造",
+    "title": "舊城區街廓再生",
+    "description": "虛構舊城區的老屋修繕、騎樓整平與店家輔導。此為測試用的虛構題材，並非真實新聞。",
+    "category": "都市更新",
+    "seed": 2828427124,
+    "theme": "oldtown",
+    "locationLabel": "舊城區（虛構）"
+  },
+  {
+    "id": "cloudlake-reservoir",
+    "shortTitle": "水庫供水",
+    "title": "雲湖水庫供水調度",
+    "description": "虛構水庫的蓄水率、分區供水與節水措施。此為測試用的虛構題材，並非真實新聞。",
+    "category": "水資源",
+    "seed": 3162277660,
+    "theme": "reservoir",
+    "locationLabel": "雲湖（虛構）"
+  },
+  {
+    "id": "goldfield-farm-market",
+    "shortTitle": "農業市集",
+    "title": "金田農夫市集",
+    "description": "虛構農業區的市集、產銷履歷與灌溉設施。此為測試用的虛構題材，並非真實新聞。",
+    "category": "農業",
+    "seed": 2000000014,
+    "theme": "farm",
+    "locationLabel": "金田（虛構）"
+  },
+  {
+    "id": "harbor-arena",
+    "shortTitle": "運動賽事",
+    "title": "海港巨蛋賽事管理",
+    "description": "虛構體育館的賽事交通、散場人流與場館維護。此為測試用的虛構題材，並非真實新聞。",
+    "category": "體育",
+    "seed": 1259921049,
+    "theme": "stadium",
+    "locationLabel": "海港巨蛋（虛構）"
+  },
+  {
+    "id": "smartcity-datacenter",
+    "shortTitle": "數位治理",
+    "title": "智慧城市資料平台",
+    "description": "虛構市府資料平台的開放資料、系統更新與資安演練。此為測試用的虛構題材，並非真實新聞。",
+    "category": "科技",
+    "seed": 1442249570,
+    "theme": "tech",
+    "locationLabel": "市府資訊中心（虛構）"
+  },
+  {
+    "id": "northhill-disaster-prep",
+    "shortTitle": "山區防災",
+    "title": "北嶺山區防災整備",
+    "description": "虛構山區的邊坡監測、疏散演練與防災物資整備。此為測試用的虛構題材，並非真實新聞。",
+    "category": "防災",
+    "seed": 1912931182,
+    "theme": "mountain",
+    "locationLabel": "北嶺（虛構）"
   }
 ]

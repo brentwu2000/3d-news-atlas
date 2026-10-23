@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import {
+  birdseyePose,
   clampTargetDelta,
   FOCUS_WIDTH_DESKTOP,
   FOCUS_WIDTH_MOBILE,
@@ -52,6 +53,7 @@ export function CameraDirector({ bounds, placements, reducedMotion, occludedRigh
   const height = useThree((s) => s.size.height);
   const selectedTopicId = useAtlasStore((s) => s.selectedTopicId);
   const overviewRequest = useAtlasStore((s) => s.overviewRequest);
+  const birdseye = useAtlasStore((s) => s.birdseye);
   const limits = useMemo(() => orbitLimits(bounds), [bounds]);
 
   const aspect = width / Math.max(1, height);
@@ -155,6 +157,18 @@ export function CameraDirector({ bounds, placements, reducedMotion, occludedRigh
     }
     // `aspect` is intentionally read from the render scope: a resize while focused re-frames.
   }, [api, selectedTopicId, placements, aspect, occludedRight, desktop]);
+
+  // Bird's-eye toggle (only meaningful with nothing selected; the toggle clears selection).
+  const firstBirdseye = useRef(true);
+  useEffect(() => {
+    if (firstBirdseye.current) {
+      firstBirdseye.current = false;
+      return;
+    }
+    savedOverview.current = null;
+    const b = latest.current.bounds;
+    api.flyTo(birdseye ? birdseyePose(b, latest.current.aspect) : overviewPose(b, latest.current.aspect), "returning", "overview");
+  }, [api, birdseye]);
 
   // Explicit "back to overview" with nothing selected: canonical pose.
   useEffect(() => {

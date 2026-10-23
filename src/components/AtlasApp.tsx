@@ -2,18 +2,22 @@
 
 import { useEffect, useMemo, useRef } from "react";
 import { AtlasClient } from "@/components/atlas/AtlasClient";
-import { EventNavigator } from "@/components/ui/EventNavigator";
+import { BrandCard, Hero, HintBubble, QuickJump, SideButtons, Toolbar } from "@/components/ui/Chrome";
+import { AboutDialog, HelpDialog, Onboarding, useOnboardingOnce } from "@/components/ui/Dialogs";
+import { EventIndex } from "@/components/ui/EventIndex";
 import { EventPanel } from "@/components/ui/EventPanel";
-import { CategoryChips, SearchField } from "@/components/ui/Filters";
+import { OverviewCard } from "@/components/ui/OverviewCard";
 import { Timeline } from "@/components/ui/Timeline";
 import { useMediaQuery } from "@/lib/hooks";
 import { filterEvents, filterEventsIgnoringDate, type AtlasData } from "@/lib/normalize";
 import { parseUrlState, serializeUrlState } from "@/lib/url-state";
 import { useAtlasStore } from "@/store/atlas-store";
 
-/** Desktop drawer width (Tailwind w-96). Also used by the camera to frame around it. */
-export const DRAWER_WIDTH_PX = 384;
+/** Desktop detail card width + margin. The camera frames focused tiles around it. */
+export const DRAWER_WIDTH_PX = 400;
 const DESKTOP_QUERY = "(min-width: 1024px)";
+/** Guided tour: milliseconds per tile. */
+const TOUR_STEP_MS = 5000;
 
 /**
  * URL ⇄ store sync. Reads the URL once after hydration (so server and first
@@ -24,22 +28,17 @@ function useUrlSync(data: AtlasData) {
   useEffect(() => {
     const store = useAtlasStore;
     store.getState().applyUrlState(parseUrlState(window.location.search, data));
-
     const write = () => {
       const s = store.getState();
-      const next = serializeUrlState(
-        { topicId: s.selectedTopicId, eventId: s.selectedEventId, filters: s.filters },
-        window.location.search,
-      );
+      const next = serializeUrlState({ topicId: s.selectedTopicId, eventId: s.selectedEventId, filters: s.filters }, window.location.search);
       if (next !== window.location.search) {
         window.history.replaceState(window.history.state, "", `${window.location.pathname}${next}${window.location.hash}`);
       }
     };
     write();
-    const unsubscribe = store.subscribe((s, prev) => {
+    return store.subscribe((s, prev) => {
       if (s.selectedTopicId !== prev.selectedTopicId || s.selectedEventId !== prev.selectedEventId || s.filters !== prev.filters) write();
     });
-    return unsubscribe;
   }, [data]);
 }
 
@@ -61,7 +60,7 @@ function useEscapeKey() {
   }, []);
 }
 
-/** When the panel closes, return focus to the list item that represents what was open. */
+/** When the panel closes, return focus to the index item that represents what was open. */
 function useFocusRestore(panelRef: React.RefObject<HTMLElement | null>) {
   useEffect(
     () =>
@@ -73,15 +72,42 @@ function useFocusRestore(panelRef: React.RefObject<HTMLElement | null>) {
         const focusWasInPanel = !active || active === document.body || (panelRef.current?.contains(active) ?? false);
         if (!focusWasInPanel) return;
         requestAnimationFrame(() => {
-          const id = closedEvent ? `nav-event-${closedEvent}` : `nav-topic-${closedTopic}`;
-          const el = document.getElementById(id);
-          // Closing an event leaves the topic open: its overview heading is the better target there.
           if (closedEvent && s.selectedTopicId) document.getElementById("panel-heading")?.focus({ preventScroll: true });
-          else el?.focus({ preventScroll: true });
+          else document.getElementById(`nav-topic-${closedTopic ?? ""}`)?.focus({ preventScroll: true });
         });
       }),
     [panelRef],
   );
+}
+
+/** Guided tour: step through tiles until the user interacts. */
+function useTour(data: AtlasData) {
+  const touring = useAtlasStore((s) => s.touring);
+  useEffect(() => {
+    if (!touring) return;
+    const step = () => {
+      const s = useAtlasStore.getState();
+      const i = data.topics.findIndex((t) => t.id === s.selectedTopicId);
+      const next = data.topics[(i + 1) % data.topics.length];
+      if (next) s.selectTopic(next.id);
+    };
+    step();
+    const timer = window.setInterval(step, TOUR_STEP_MS);
+    const stop = (e: Event) => {
+      // Clicks on the tour button itself toggle the tour; any other interaction stops it.
+      if ((e.target as HTMLElement | null)?.closest?.("[data-tour-toggle]")) return;
+      useAtlasStore.getState().setTouring(false);
+    };
+    window.addEventListener("pointerdown", stop, true);
+    window.addEventListener("keydown", stop, true);
+    window.addEventListener("wheel", stop, { capture: true, passive: true });
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener("pointerdown", stop, true);
+      window.removeEventListener("keydown", stop, true);
+      window.removeEventListener("wheel", stop, true);
+    };
+  }, [touring, data]);
 }
 
 export function AtlasApp({ data }: { data: AtlasData }) {
@@ -89,96 +115,133 @@ export function AtlasApp({ data }: { data: AtlasData }) {
   const selectedTopicId = useAtlasStore((s) => s.selectedTopicId);
   const sheetExpanded = useAtlasStore((s) => s.sheetExpanded);
   const setSheetExpanded = useAtlasStore((s) => s.setSheetExpanded);
+  const indexOpen = useAtlasStore((s) => s.indexOpen);
+  const overviewOpen = useAtlasStore((s) => s.overviewOpen);
+  const timelineOpen = useAtlasStore((s) => s.timelineOpen);
+  const setTimelineOpen = useAtlasStore((s) => s.setTimelineOpen);
+  const dialog = useAtlasStore((s) => s.dialog);
   const desktop = useMediaQuery(DESKTOP_QUERY, true);
   const panelRef = useRef<HTMLElement>(null);
 
   useUrlSync(data);
   useEscapeKey();
   useFocusRestore(panelRef);
+  useTour(data);
+  useOnboardingOnce();
 
   const visible = useMemo(() => filterEvents(data, filters), [data, filters]);
   const visibleIds = useMemo(() => new Set(visible.map((e) => e.id)), [visible]);
   const totalMatching = useMemo(() => filterEventsIgnoringDate(data, filters).length, [data, filters]);
   const panelOpen = selectedTopicId !== null;
 
-  const sheetClasses = sheetExpanded
-    ? "max-lg:absolute max-lg:inset-x-0 max-lg:bottom-0 max-lg:z-30 max-lg:h-[78%]"
-    : "max-lg:h-[40%] max-lg:shrink-0";
-
+  const sheet = sheetExpanded ? "max-lg:absolute max-lg:inset-x-0 max-lg:bottom-0 max-lg:z-30 max-lg:h-[80%]" : "max-lg:h-[44%] max-lg:shrink-0";
   const sheetToggle = (controls: string) => (
     <button
       type="button"
       aria-expanded={sheetExpanded}
       aria-controls={controls}
       onClick={() => setSheetExpanded(!sheetExpanded)}
-      className="flex w-full items-center justify-center gap-2 py-1.5 text-xs text-[var(--ui-muted)] lg:hidden"
+      className="flex w-full items-center justify-center gap-2 pt-2 pb-1 text-[12px] text-muted lg:hidden"
     >
-      <span aria-hidden="true" className="h-1 w-10 rounded-full bg-white/30" />
+      <span aria-hidden="true" className="h-1 w-10 rounded-full bg-ink/25" />
       <span>{sheetExpanded ? "收合面板" : "展開面板"}</span>
     </button>
   );
 
   return (
-    <div
-      className="flex h-dvh flex-col overflow-hidden bg-atlas-backdrop text-[var(--ui-text)]"
-      data-visible-count={visible.length}
-    >
-      {/* Mobile: [title · badge | search] / [chips]. Desktop: one row. */}
-      <header className="z-20 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-3 gap-y-1.5 border-b border-[var(--ui-border)] bg-[var(--ui-surface-solid)] px-3 py-2 lg:flex lg:gap-4 lg:px-4">
-        <div className="flex min-w-0 items-center gap-2 lg:block lg:w-64 lg:shrink-0">
-          <h1 className="text-base font-semibold whitespace-nowrap lg:text-lg">3D 新聞地圖</h1>
-          <p className="truncate text-xs text-[var(--ui-muted)]">
-            <span className="hidden lg:inline">以島嶼瀏覽主題、標記瀏覽事件 · </span>
-            <span className="text-atlas-highlight">
-              <span className="lg:hidden">虛構範例</span>
-              <span className="hidden lg:inline">內容皆為虛構範例</span>
-            </span>
-          </p>
-        </div>
-        <SearchField className="min-w-0 lg:w-72 lg:shrink-0" />
-        <CategoryChips categories={data.categories} className="col-span-2 min-w-0" />
-      </header>
+    <div className="relative flex h-dvh flex-col overflow-hidden bg-[var(--scene-bg)] lg:flex-row" data-visible-count={visible.length}>
+      {/* ---------------- Map area ---------------- */}
+      {/* Mobile: fixed 56% height so expanding/collapsing the sheet never resizes the canvas. */}
+      <section aria-label="3D 城市地圖" className="relative min-h-0 min-w-0 flex-1 max-lg:h-[56%] max-lg:flex-none">
+        <AtlasClient data={data} occludedRightPx={panelOpen ? DRAWER_WIDTH_PX : 0} desktop={desktop} />
 
-      <div className="relative flex min-h-0 flex-1 flex-col lg:grid lg:grid-cols-[20rem_minmax(0,1fr)]">
-        {/* Topic / event navigation: left column on desktop, bottom sheet on mobile. */}
-        <aside
-          id="atlas-nav"
-          aria-label="主題列表"
-          className={`order-3 flex min-h-0 flex-col border-[var(--ui-border)] bg-[var(--ui-surface-solid)] max-lg:rounded-t-xl max-lg:border-t lg:order-none lg:border-r ${panelOpen ? "max-lg:hidden" : ""} ${sheetClasses}`}
-        >
-          {sheetToggle("atlas-nav-scroll")}
-          <div id="atlas-nav-scroll" className="min-h-0 flex-1 overflow-y-auto px-3 pb-3 lg:pt-3">
-            <EventNavigator data={data} visible={visible} totalMatching={totalMatching} />
+        <div className="pointer-events-none absolute inset-0 z-10">
+          {/* Top row: brand + toolbar. */}
+          <div className="absolute inset-x-0 top-0 flex items-start gap-3 p-3 lg:p-4">
+            <div className="pointer-events-auto shrink-0">
+              <BrandCard />
+            </div>
+            <div className="pointer-events-auto min-w-0 overflow-x-auto pb-1 max-lg:hidden">
+              <Toolbar />
+            </div>
           </div>
-        </aside>
-
-        <section aria-label="3D 主題地圖" className="relative order-1 min-h-0 flex-1 lg:order-none">
-          <AtlasClient data={data} occludedRightPx={panelOpen ? DRAWER_WIDTH_PX : 0} desktop={desktop} />
-        </section>
-
-        {/* Timeline: in flow between canvas and sheet on mobile (never covers the scene), overlay on desktop. */}
-        <div
-          className="order-2 border-t border-[var(--ui-border)] bg-[var(--ui-surface-solid)] px-2 py-1 lg:pointer-events-none lg:absolute lg:right-0 lg:bottom-0 lg:left-80 lg:z-10 lg:border-0 lg:bg-transparent lg:p-3"
-          style={desktop && panelOpen ? { right: DRAWER_WIDTH_PX } : undefined}
-        >
-          <div className="mx-auto max-w-2xl lg:pointer-events-auto">
-            <Timeline data={data} filters={filters} visibleCount={visible.length} />
+          {/* Mobile: one horizontally scrolling strip with every control. */}
+          <div className="pointer-events-auto absolute inset-x-0 top-[80px] overflow-x-auto px-3 pb-1 lg:hidden">
+            <div className="flex w-max gap-2">
+              <Toolbar />
+              <SideButtons vertical={false} />
+            </div>
           </div>
+
+          {/* Desktop: hero heading + right-hand floating buttons. */}
+          {!overviewOpen && (
+            <div className="absolute top-[118px] left-6 max-lg:hidden">
+              <Hero count={data.topics.length} />
+            </div>
+          )}
+          <div className="pointer-events-auto absolute top-4 right-4 max-lg:hidden">
+            <SideButtons vertical={!panelOpen} compact={panelOpen} />
+          </div>
+
+          {overviewOpen && (
+            <div className="pointer-events-auto absolute top-[100px] bottom-4 left-4 w-[340px] max-lg:inset-x-3 max-lg:top-[130px] max-lg:bottom-3 max-lg:w-auto">
+              <OverviewCard data={data} visible={visible} />
+            </div>
+          )}
+
+          {timelineOpen && (
+            <div
+              className="card pointer-events-auto absolute bottom-4 left-1/2 w-[min(560px,calc(100%-2rem))] -translate-x-1/2 p-4 max-lg:bottom-3"
+              style={desktop && panelOpen ? { left: `calc((100% - ${DRAWER_WIDTH_PX}px) / 2)` } : undefined}
+            >
+              <Timeline data={data} filters={filters} visibleCount={visible.length} onClose={() => setTimelineOpen(false)} />
+            </div>
+          )}
+
+          {!panelOpen && !timelineOpen && (
+            <div className="pointer-events-auto absolute right-4 bottom-4 flex flex-col items-end gap-2 max-lg:hidden">
+              <HintBubble text="提示・點一格，看看發生過什麼" />
+              <QuickJump topics={data.topics} />
+            </div>
+          )}
         </div>
 
-        {/* Detail: right drawer over the canvas on desktop, bottom sheet on mobile. */}
-        {panelOpen && (
+        {/* Desktop detail card (floats over the map's right side). */}
+        {panelOpen && desktop && (
           <aside
             ref={panelRef}
             id="atlas-panel"
             aria-label="詳細資訊"
-            className={`order-3 flex min-h-0 flex-col border-[var(--ui-border)] bg-[var(--ui-surface-solid)] max-lg:rounded-t-xl max-lg:border-t lg:absolute lg:inset-y-0 lg:right-0 lg:z-20 lg:w-96 lg:border-l ${sheetClasses}`}
+            className="card absolute top-[76px] right-4 bottom-4 z-20 flex min-h-0 w-[380px] flex-col overflow-hidden"
           >
-            {sheetToggle("atlas-panel")}
             <EventPanel data={data} visibleIds={visibleIds} />
           </aside>
         )}
-      </div>
+      </section>
+
+      {/* ---------------- Index (desktop sidebar / mobile sheet) ---------------- */}
+      {(indexOpen || !desktop) && !(panelOpen && !desktop) && (
+        <aside
+          id="atlas-index"
+          aria-label="主題與事件清單"
+          className={`z-20 flex min-h-0 flex-col bg-paper max-lg:rounded-t-2xl max-lg:shadow-[0_-8px_24px_rgb(0_0_0/0.3)] lg:w-[360px] lg:shrink-0 ${sheet}`}
+        >
+          {sheetToggle("atlas-index")}
+          <EventIndex data={data} visible={visible} totalMatching={totalMatching} />
+        </aside>
+      )}
+
+      {/* Mobile detail sheet. */}
+      {panelOpen && !desktop && (
+        <aside ref={panelRef} id="atlas-panel" aria-label="詳細資訊" className={`z-20 flex min-h-0 flex-col rounded-t-2xl bg-paper shadow-[0_-8px_24px_rgb(0_0_0/0.3)] ${sheet}`}>
+          {sheetToggle("atlas-panel")}
+          <EventPanel data={data} visibleIds={visibleIds} />
+        </aside>
+      )}
+
+      {dialog === "onboarding" && <Onboarding />}
+      {dialog === "help" && <HelpDialog />}
+      {dialog === "about" && <AboutDialog />}
     </div>
   );
 }
