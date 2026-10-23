@@ -1,0 +1,55 @@
+{
+  "label": "before",
+  "baseUrl": "http://127.0.0.1:3100",
+  "renderer": "headless Chromium + SwiftShader (software)",
+  "results": {
+    "desktop": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "fpsSamples": [
+        30,
+        30,
+        31,
+        29
+      ],
+      "fpsMedian": 30,
+      "drawCalls": 68,
+      "triangles": 18854,
+      "geometries": 19,
+      "textures": 3,
+      "programs": 7,
+      "dpr": 1,
+      "transfer": {
+        "jsBytes": 429342,
+        "allBytes": 434407,
+        "jsFiles": 9
+      }
+    },
+    "mobile": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fpsSamples": [
+        60,
+        60,
+        60,
+        60
+      ],
+      "fpsMedian": 60,
+      "drawCalls": 37,
+      "triangles": 5710,
+      "geometries": 19,
+      "textures": 1,
+      "programs": 3,
+      "dpr": 1,
+      "transfer": {
+        "jsBytes": 429342,
+        "allBytes": 434407,
+        "jsFiles": 9
+      }
+    }
+  }
+}

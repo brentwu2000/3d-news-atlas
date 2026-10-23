@@ -1,0 +1,46 @@
+[
+  {
+    "id": "harborton-light-rail",
+    "title": "【虛構範例】海港市輕軌延伸計畫",
+    "description": "虛構城市「海港市」的輕軌延伸路線規劃、公聽會與施工進度。此為測試用的虛構題材，並非真實新聞。",
+    "category": "城市交通",
+    "seed": 1029384756,
+    "theme": "city",
+    "locationLabel": "海港市（虛構）"
+  },
+  {
+    "id": "greenridge-reforestation",
+    "title": "【虛構範例】青嶺林區復育行動",
+    "description": "虛構林區「青嶺」的造林、物種調查與志工活動紀錄。此為測試用的虛構題材，並非真實新聞。",
+    "category": "環境",
+    "seed": 2837465190,
+    "theme": "forest",
+    "locationLabel": "青嶺（虛構）"
+  },
+  {
+    "id": "northbay-industrial-transition",
+    "title": "【虛構範例】北灣工業區轉型",
+    "description": "虛構「北灣工業區」的能源轉換、廠區更新與勞工訓練計畫。此為測試用的虛構題材，並非真實新聞。",
+    "category": "產業",
+    "seed": 384756102,
+    "theme": "industry",
+    "locationLabel": "北灣（虛構）"
+  },
+  {
+    "id": "silversand-coast-monitoring",
+    "title": "【虛構範例】銀沙海岸侵蝕監測",
+    "description": "虛構「銀沙海岸」的海岸線監測、防護工程與社區討論。此為測試用的虛構題材，並非真實新聞。",
+    "category": "氣候",
+    "seed": 3141592653,
+    "theme": "coast",
+    "locationLabel": "銀沙海岸（虛構）"
+  },
+  {
+    "id": "central-council-budget",
+    "title": "【虛構範例】中央議會年度預算審議",
+    "description": "虛構「中央議會」的年度預算審議流程、修正案與表決紀錄。此為測試用的虛構題材，並非真實新聞。",
+    "category": "公共政策",
+    "seed": 2718281828,
+    "theme": "civic"
+  }
+]

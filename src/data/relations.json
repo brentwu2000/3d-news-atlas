@@ -1,0 +1,74 @@
+[
+  {
+    "id": "rel-hearing-to-review",
+    "fromEventId": "hr-route-hearing",
+    "toEventId": "hr-environmental-review",
+    "type": "chronological",
+    "explanation": "公聽會之後，同一路線進入環評初審程序。",
+    "sourceIds": []
+  },
+  {
+    "id": "rel-amendment-cost",
+    "fromEventId": "cc-transit-amendment",
+    "toEventId": "hr-cost-estimate-dispute",
+    "type": "related",
+    "explanation": "修正案與經費估算爭議都涉及東延線第一階段的經費。",
+    "sourceIds": [
+      "src-cc-transit-amendment-1"
+    ]
+  },
+  {
+    "id": "rel-amendment-construction",
+    "fromEventId": "cc-transit-amendment",
+    "toEventId": "hr-construction-start",
+    "type": "causal_claim",
+    "explanation": "海港市政府新聞稿聲稱，修正案確保的經費使第一階段得以開工。此為官方說法，本站未獨立查證因果關係。",
+    "sourceIds": [
+      "src-hr-construction-start-1"
+    ]
+  },
+  {
+    "id": "rel-solar-emissions",
+    "fromEventId": "nb-solar-pilot",
+    "toEventId": "nb-emissions-claim",
+    "type": "related",
+    "explanation": "排放減量的說法以太陽能試辦為比較對象。",
+    "sourceIds": []
+  },
+  {
+    "id": "rel-erosion-seawall",
+    "fromEventId": "ss-erosion-report",
+    "toEventId": "ss-seawall-proposal",
+    "type": "causal_claim",
+    "explanation": "沿岸社區協會聲稱，侵蝕報告是提出防波堤方案的主要原因。此為單方聲明，尚有不同意見。",
+    "sourceIds": [
+      "src-ss-seawall-proposal-2"
+    ]
+  },
+  {
+    "id": "rel-planting-closure",
+    "fromEventId": "gr-seedling-planting",
+    "toEventId": "gr-trail-closure",
+    "type": "chronological",
+    "explanation": "同一林區先後發生的兩項管理措施。",
+    "sourceIds": []
+  },
+  {
+    "id": "rel-survey-closure",
+    "fromEventId": "gr-species-survey",
+    "toEventId": "gr-trail-closure",
+    "type": "related",
+    "explanation": "封閉公告提到保護物種調查的樣區。",
+    "sourceIds": [
+      "src-gr-trail-closure-1"
+    ]
+  },
+  {
+    "id": "rel-proposal-final",
+    "fromEventId": "cc-budget-proposal",
+    "toEventId": "cc-final-vote",
+    "type": "chronological",
+    "explanation": "同一份年度預算從送交到三讀的程序。",
+    "sourceIds": []
+  }
+]

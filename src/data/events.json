@@ -1,0 +1,435 @@
+[
+  {
+    "id": "hr-route-hearing",
+    "topicId": "harborton-light-rail",
+    "title": "輕軌延伸路線舉行首場公聽會",
+    "summary": "海港市就輕軌東延線三個路線方案舉行公聽會，居民主要關注施工噪音與站點位置。",
+    "occurredAt": "2026-01-14T19:00:00+08:00",
+    "publishedAt": "2026-01-15T08:30:00+08:00",
+    "sources": [
+      {
+        "id": "src-hr-route-hearing-1",
+        "title": "東延線公聽會：居民關注站點與噪音",
+        "url": "https://example.org/fictional/hd/hr-route-hearing-1",
+        "publisher": "海港日報（虛構）",
+        "publishedAt": "2026-01-15T08:30:00+08:00"
+      }
+    ],
+    "tags": [
+      "輕軌",
+      "公聽會",
+      "交通"
+    ],
+    "status": "reported",
+    "isFictional": true
+  },
+  {
+    "id": "hr-environmental-review",
+    "topicId": "harborton-light-rail",
+    "title": "東延線環境影響評估初審通過",
+    "summary": "環評委員會以附帶條件方式通過初審，要求補充夜間施工噪音監測計畫。",
+    "occurredAt": "2026-02-20T14:00:00+08:00",
+    "publishedAt": "2026-02-20T18:10:00+08:00",
+    "sources": [
+      {
+        "id": "src-hr-environmental-review-1",
+        "title": "東延線環評初審附條件通過",
+        "url": "https://example.org/fictional/hd/hr-environmental-review-1",
+        "publisher": "海港日報（虛構）",
+        "publishedAt": "2026-02-20T18:10:00+08:00"
+      },
+      {
+        "id": "src-hr-environmental-review-2",
+        "title": "環評初審結果說明",
+        "url": "https://example.org/fictional/gov/hr-environmental-review-2",
+        "publisher": "海港市政府新聞稿（虛構）",
+        "publishedAt": "2026-02-20T17:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "輕軌",
+      "環評"
+    ],
+    "status": "verified",
+    "isFictional": true
+  },
+  {
+    "id": "hr-cost-estimate-dispute",
+    "topicId": "harborton-light-rail",
+    "title": "東延線工程經費估算出現分歧",
+    "summary": "市府估算與外部顧問報告的經費差距約兩成，雙方對物價調整假設看法不同。",
+    "occurredAt": "2026-03-18T10:00:00+08:00",
+    "publishedAt": "2026-03-18T21:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-hr-cost-estimate-dispute-1",
+        "title": "東延線經費估算 市府與顧問說法不一",
+        "url": "https://example.org/fictional/hd/hr-cost-estimate-dispute-1",
+        "publisher": "海港日報（虛構）",
+        "publishedAt": "2026-03-18T21:00:00+08:00"
+      },
+      {
+        "id": "src-hr-cost-estimate-dispute-2",
+        "title": "經費估算差異整理",
+        "url": "https://example.org/fictional/obs/hr-cost-estimate-dispute-2",
+        "publisher": "公民觀察站（虛構）",
+        "publishedAt": "2026-03-19T09:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "輕軌",
+      "預算",
+      "爭議"
+    ],
+    "status": "disputed",
+    "isFictional": true
+  },
+  {
+    "id": "hr-construction-start",
+    "topicId": "harborton-light-rail",
+    "title": "東延線第一階段工程開工",
+    "summary": "第一階段高架段開工，市府表示預計施工三十個月，期間部分道路改道。",
+    "occurredAt": "2026-05-06T09:00:00+08:00",
+    "publishedAt": "2026-05-06T12:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-hr-construction-start-1",
+        "title": "東延線第一階段開工典禮",
+        "url": "https://example.org/fictional/gov/hr-construction-start-1",
+        "publisher": "海港市政府新聞稿（虛構）",
+        "publishedAt": "2026-05-06T10:30:00+08:00"
+      },
+      {
+        "id": "src-hr-construction-start-2",
+        "title": "東延線開工 周邊道路改道",
+        "url": "https://example.org/fictional/hd/hr-construction-start-2",
+        "publisher": "海港日報（虛構）",
+        "publishedAt": "2026-05-06T12:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "輕軌",
+      "施工"
+    ],
+    "status": "reported",
+    "isFictional": true
+  },
+  {
+    "id": "gr-seedling-planting",
+    "topicId": "greenridge-reforestation",
+    "title": "志工種植三千株原生苗木",
+    "summary": "青嶺林區週末植樹活動共種植約三千株原生樹苗，主辦單位將追蹤一年存活率。",
+    "occurredAt": "2026-01-25T09:00:00+08:00",
+    "publishedAt": "2026-01-26T07:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-gr-seedling-planting-1",
+        "title": "三千株原生苗木落地青嶺",
+        "url": "https://example.org/fictional/gr/gr-seedling-planting-1",
+        "publisher": "青嶺社區通訊（虛構）",
+        "publishedAt": "2026-01-26T07:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "造林",
+      "志工"
+    ],
+    "status": "verified",
+    "isFictional": true
+  },
+  {
+    "id": "gr-species-survey",
+    "topicId": "greenridge-reforestation",
+    "title": "物種調查記錄到稀有蕨類",
+    "summary": "春季物種調查在溪谷記錄到一種區域性稀有蕨類，調查團隊將持續監測族群。",
+    "occurredAt": "2026-03-02T11:00:00+08:00",
+    "publishedAt": "2026-03-04T08:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-gr-species-survey-1",
+        "title": "青嶺春季物種調查初步結果",
+        "url": "https://example.org/fictional/gr/gr-species-survey-1",
+        "publisher": "青嶺社區通訊（虛構）",
+        "publishedAt": "2026-03-04T08:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "物種調查",
+      "生態"
+    ],
+    "status": "corrected",
+    "isFictional": true,
+    "correctionNote": "初版報導稱記錄到兩種稀有蕨類，經調查團隊複核後更正為一種；另一種為常見種的誤判。"
+  },
+  {
+    "id": "gr-trail-closure",
+    "topicId": "greenridge-reforestation",
+    "title": "部分步道暫時封閉以保護調查區",
+    "summary": "管理單位公告溪谷步道封閉六週，理由為保護調查樣區並修復沖刷路段。",
+    "occurredAt": "2026-04-12T08:00:00+08:00",
+    "publishedAt": "2026-04-12T15:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-gr-trail-closure-1",
+        "title": "溪谷步道封閉六週公告",
+        "url": "https://example.org/fictional/gr/gr-trail-closure-1",
+        "publisher": "青嶺社區通訊（虛構）",
+        "publishedAt": "2026-04-12T15:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "步道",
+      "公告"
+    ],
+    "status": "reported",
+    "isFictional": true
+  },
+  {
+    "id": "nb-solar-pilot",
+    "topicId": "northbay-industrial-transition",
+    "title": "工業區屋頂太陽能試辦啟動",
+    "summary": "北灣工業區十二間工廠參與屋頂太陽能試辦，首年目標為部分廠區用電自給。",
+    "occurredAt": "2026-01-30T10:00:00+08:00",
+    "publishedAt": "2026-01-30T16:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-nb-solar-pilot-1",
+        "title": "北灣十二廠參與屋頂太陽能試辦",
+        "url": "https://example.org/fictional/nb/nb-solar-pilot-1",
+        "publisher": "北灣產業週刊（虛構）",
+        "publishedAt": "2026-01-30T16:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "能源",
+      "太陽能"
+    ],
+    "status": "verified",
+    "isFictional": true
+  },
+  {
+    "id": "nb-plant-retrofit",
+    "topicId": "northbay-industrial-transition",
+    "title": "老舊廠房更新計畫公布",
+    "summary": "工業區管理處公布老舊廠房更新時程，首批改建以倉儲與物流設施為主。",
+    "occurredAt": "2026-03-10T09:30:00+08:00",
+    "publishedAt": "2026-03-10T13:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-nb-plant-retrofit-1",
+        "title": "廠房更新計畫首批名單",
+        "url": "https://example.org/fictional/nb/nb-plant-retrofit-1",
+        "publisher": "北灣產業週刊（虛構）",
+        "publishedAt": "2026-03-10T13:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "廠房",
+      "更新"
+    ],
+    "status": "reported",
+    "isFictional": true
+  },
+  {
+    "id": "nb-training-program",
+    "topicId": "northbay-industrial-transition",
+    "title": "勞工轉職訓練課程開班",
+    "summary": "首期轉職訓練課程開班，內容包含設備維護與能源管理，名額已額滿。",
+    "occurredAt": "2026-04-22T09:00:00+08:00",
+    "publishedAt": "2026-04-22T18:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-nb-training-program-1",
+        "title": "轉職訓練首期開班",
+        "url": "https://example.org/fictional/nb/nb-training-program-1",
+        "publisher": "北灣產業週刊（虛構）",
+        "publishedAt": "2026-04-22T18:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "勞工",
+      "訓練"
+    ],
+    "status": "verified",
+    "isFictional": true
+  },
+  {
+    "id": "nb-emissions-claim",
+    "topicId": "northbay-industrial-transition",
+    "title": "排放減量成效說法受質疑",
+    "summary": "業者宣稱試辦後排放減少三成，環保團體認為統計基準不一致，數字仍有爭議。",
+    "occurredAt": "2026-05-15T11:00:00+08:00",
+    "publishedAt": "2026-05-16T09:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-nb-emissions-claim-1",
+        "title": "排放減量三成？業者與團體說法分歧",
+        "url": "https://example.org/fictional/nb/nb-emissions-claim-1",
+        "publisher": "北灣產業週刊（虛構）",
+        "publishedAt": "2026-05-16T09:00:00+08:00"
+      },
+      {
+        "id": "src-nb-emissions-claim-2",
+        "title": "排放數據比較方法說明",
+        "url": "https://example.org/fictional/obs/nb-emissions-claim-2",
+        "publisher": "公民觀察站（虛構）",
+        "publishedAt": "2026-05-17T10:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "排放",
+      "爭議",
+      "能源"
+    ],
+    "status": "disputed",
+    "isFictional": true
+  },
+  {
+    "id": "ss-erosion-report",
+    "topicId": "silversand-coast-monitoring",
+    "title": "年度海岸侵蝕監測報告發布",
+    "summary": "監測報告指出部分沙灘段後退幅度高於前一年，報告附有測量方法與誤差說明。",
+    "occurredAt": "2026-02-05T10:00:00+08:00",
+    "publishedAt": "2026-02-05T19:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-ss-erosion-report-1",
+        "title": "銀沙海岸年度侵蝕報告重點",
+        "url": "https://example.org/fictional/ss/ss-erosion-report-1",
+        "publisher": "銀沙海岸電台（虛構）",
+        "publishedAt": "2026-02-05T19:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "海岸",
+      "監測"
+    ],
+    "status": "reported",
+    "isFictional": true
+  },
+  {
+    "id": "ss-seawall-proposal",
+    "topicId": "silversand-coast-monitoring",
+    "title": "防波堤方案引發社區討論",
+    "summary": "地方提出興建防波堤方案，支持者重視防災，反對者擔心影響沙灘與漁業。",
+    "occurredAt": "2026-03-25T19:30:00+08:00",
+    "publishedAt": "2026-03-26T08:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-ss-seawall-proposal-1",
+        "title": "防波堤方案說明會現場",
+        "url": "https://example.org/fictional/ss/ss-seawall-proposal-1",
+        "publisher": "銀沙海岸電台（虛構）",
+        "publishedAt": "2026-03-26T08:00:00+08:00"
+      },
+      {
+        "id": "src-ss-seawall-proposal-2",
+        "title": "沿岸社區協會聲明整理",
+        "url": "https://example.org/fictional/obs/ss-seawall-proposal-2",
+        "publisher": "公民觀察站（虛構）",
+        "publishedAt": "2026-03-26T12:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "海岸",
+      "防波堤",
+      "爭議"
+    ],
+    "status": "disputed",
+    "isFictional": true
+  },
+  {
+    "id": "ss-dune-restoration",
+    "topicId": "silversand-coast-monitoring",
+    "title": "沙丘復育試驗區完工",
+    "summary": "以定沙籬與原生植物復育的試驗區完工，研究團隊將比較一年內的沙量變化。",
+    "occurredAt": "2026-05-20T09:00:00+08:00",
+    "publishedAt": "2026-05-20T17:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-ss-dune-restoration-1",
+        "title": "沙丘復育試驗區完工",
+        "url": "https://example.org/fictional/ss/ss-dune-restoration-1",
+        "publisher": "銀沙海岸電台（虛構）",
+        "publishedAt": "2026-05-20T17:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "海岸",
+      "復育"
+    ],
+    "status": "verified",
+    "isFictional": true
+  },
+  {
+    "id": "cc-budget-proposal",
+    "topicId": "central-council-budget",
+    "title": "年度預算草案送交議會",
+    "summary": "行政部門將年度總預算草案送交議會，交通與公共工程項目占比較前一年提高。",
+    "occurredAt": "2026-02-10T10:00:00+08:00",
+    "publishedAt": "2026-02-10T15:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-cc-budget-proposal-1",
+        "title": "年度預算草案送達議會",
+        "url": "https://example.org/fictional/cc/cc-budget-proposal-1",
+        "publisher": "議會公報（虛構）",
+        "publishedAt": "2026-02-10T15:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "預算",
+      "議會"
+    ],
+    "status": "reported",
+    "isFictional": true
+  },
+  {
+    "id": "cc-transit-amendment",
+    "topicId": "central-council-budget",
+    "title": "交通預算修正案通過",
+    "summary": "議會通過交通預算修正案，調整輕軌東延線第一階段經費並要求按季報告進度。",
+    "occurredAt": "2026-03-30T16:00:00+08:00",
+    "publishedAt": "2026-03-30T20:00:00+08:00",
+    "sources": [
+      {
+        "id": "src-cc-transit-amendment-1",
+        "title": "交通預算修正案表決結果",
+        "url": "https://example.org/fictional/cc/cc-transit-amendment-1",
+        "publisher": "議會公報（虛構）",
+        "publishedAt": "2026-03-30T20:00:00+08:00"
+      }
+    ],
+    "tags": [
+      "預算",
+      "交通",
+      "修正案"
+    ],
+    "status": "verified",
+    "isFictional": true
+  },
+  {
+    "id": "cc-final-vote",
+    "topicId": "central-council-budget",
+    "title": "年度預算三讀表決",
+    "summary": "議會完成年度預算三讀，部分項目附帶決議要求追加說明。",
+    "occurredAt": "2026-06-02T17:00:00+08:00",
+    "publishedAt": "2026-06-02T21:30:00+08:00",
+    "sources": [
+      {
+        "id": "src-cc-final-vote-1",
+        "title": "年度預算三讀通過",
+        "url": "https://example.org/fictional/cc/cc-final-vote-1",
+        "publisher": "議會公報（虛構）",
+        "publishedAt": "2026-06-02T21:30:00+08:00"
+      }
+    ],
+    "tags": [
+      "預算",
+      "議會",
+      "表決"
+    ],
+    "status": "reported",
+    "isFictional": true
+  }
+]

@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+/*
+ * Art-direction tokens (POLISH-V1). Purely aesthetic: never use them to signal
+ * editorial status, truth or severity. The 3D scene reads these at runtime
+ * (src/lib/art-tokens.ts), so changing a value here re-themes the world.
+ * Values must be 6-digit hex.
+ */
+:root {
+  --atlas-backdrop: #101b2b;
+  --atlas-stone: #667080;
+  --atlas-sand: #c4ad83;
+  --atlas-foliage: #587d6b;
+  --atlas-highlight: #e9d9ad;
+}
+
+@theme inline {
+  --color-atlas-backdrop: var(--atlas-backdrop);
+  --color-atlas-stone: var(--atlas-stone);
+  --color-atlas-sand: var(--atlas-sand);
+  --color-atlas-foliage: var(--atlas-foliage);
+  --color-atlas-highlight: var(--atlas-highlight);
+}
+
+/*
+ * UI tokens: subdued translucent surfaces with high-contrast text
+ * (--ui-text on --ui-surface ≈ 13:1, --ui-muted ≈ 8:1).
+ */
+:root {
+  --ui-surface: rgb(16 27 43 / 0.86);
+  --ui-surface-solid: #142236;
+  --ui-surface-raised: #1b2c44;
+  --ui-border: rgb(233 217 173 / 0.16);
+  --ui-text: #f3efe4;
+  --ui-muted: #c2c8d2;
+  --ui-accent: var(--atlas-highlight);
+  --ui-focus: #ffd98a;
+}
+
+@layer components {
+  .ui-surface {
+    background-color: var(--ui-surface);
+    border: 1px solid var(--ui-border);
+    color: var(--ui-text);
+    backdrop-filter: blur(6px);
+  }
+  .ui-button {
+    border-radius: 0.375rem;
+    padding: 0.375rem 0.625rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--ui-text);
+  }
+  .ui-button:hover {
+    background-color: rgb(255 255 255 / 0.08);
+  }
+  .ui-button:disabled {
+    opacity: 0.5;
+  }
+  .ui-input {
+    border-radius: 0.375rem;
+    border: 1px solid var(--ui-border);
+    background-color: var(--ui-surface-solid);
+    color: var(--ui-text);
+    padding: 0.375rem 0.5rem;
+    font-size: 0.875rem;
+  }
+  .ui-input::placeholder {
+    color: var(--ui-muted);
+  }
+  .ui-chip {
+    border-radius: 9999px;
+    border: 1px solid var(--ui-border);
+    padding: 0.25rem 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--ui-muted);
+    white-space: nowrap;
+  }
+  .ui-chip[aria-pressed="true"] {
+    background-color: var(--ui-accent);
+    border-color: var(--ui-accent);
+    color: #101b2b;
+    font-weight: 600;
+  }
+  /* Status badge: identical styling for every status; the text carries the meaning. */
+  .ui-badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 0.25rem;
+    border: 1px solid var(--ui-border);
+    padding: 0 0.375rem;
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+    color: var(--ui-text);
+    white-space: nowrap;
+  }
+  .ui-link {
+    color: var(--ui-accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    overflow-wrap: anywhere;
+  }
+}
+
+:where(button, a, input, select, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--ui-focus);
+  outline-offset: 2px;
+}
+
+/* Canvas is transparent; this vignette sits behind it. */
+.atlas-backdrop {
+  background-color: var(--atlas-backdrop);
+  background-image: radial-gradient(
+    120% 85% at 50% 18%,
+    color-mix(in srgb, var(--atlas-backdrop) 78%, var(--atlas-stone)) 0%,
+    var(--atlas-backdrop) 68%
+  );
+}
+
+:root {
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    "Noto Sans TC",
+    "PingFang TC",
+    "Microsoft JhengHei",
+    sans-serif;
+}
+
+/* R3F canvas wrapper should never cause scroll or overflow. */
+canvas {
+  display: block;
+  touch-action: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Headings receive programmatic focus (tabindex=-1) for screen readers; no ring needed. */
+[tabindex="-1"]:focus {
+  outline: none;
+}
