@@ -1,0 +1,11 @@
+// Cloudflare Workers static-assets deployment of the static export in out/.
+// Build + deploy: `npm run deploy`.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "3d-news-atlas",
+  "compatibility_date": "2026-10-19",
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page"
+  }
+}

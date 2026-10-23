@@ -13,6 +13,8 @@ Interactive 3D atlas of news topics rendered as floating islands. See `CLAUDE.md
 | `npm run lint` | ESLint 9 flat config (`eslint-config-next` core-web-vitals + typescript) |
 | `npm test` | Vitest unit tests |
 | `npm run test:e2e` | Playwright smoke + interaction tests, desktop (1440×900) + mobile (Pixel 7, 390×844), 1 worker (SwiftShader is CPU-bound). Builds and starts the app on port 3100. First run: `npx playwright install chromium` |
+| `npm run build:static` | Static export to `out/` (`output: "export"`, enabled only for this script) |
+| `npm run deploy` | `build:static` + `wrangler deploy` to Cloudflare (Workers static assets, `wrangler.jsonc`) |
 
 QA URL switches: `?webgl=0` forces the 2D fallback; `?quality=low|high` overrides auto-detected quality;
 `?debug=1` shows live FPS / draw calls / triangles and exposes `window.__ATLAS_STATS__`.
@@ -20,9 +22,19 @@ QA URL switches: `?webgl=0` forces the 2D fallback; `?quality=low|high` override
 Performance + screenshot capture: `npm run build && npx next start -p 3100`, then
 `node scripts/measure.mjs <label>` → `docs/screenshots/<label>/{desktop,mobile,fallback-mobile}.png` + `perf.json`.
 
+## Deployment
+
+Live: **https://3d-news-atlas.brentwu2000.workers.dev** (Cloudflare Workers static assets).
+
+The site is fully static, so `npm run build:static` exports it to `out/` and `wrangler deploy` uploads that folder
+(`wrangler.jsonc`, `not_found_handling: "404-page"`). Response headers come from `public/_headers`
+(nosniff, referrer policy, frame denial, permissions policy, immutable caching for `/_next/static`).
+Wrangler 4.152 routes new "Pages" projects through Workers, so Workers static assets is used directly.
+Requires a logged-in wrangler (`npx wrangler login`).
+
 ## Installed versions (exact)
 
-next 16.4.2 · react / react-dom 19.3.1 · three 0.186.1 · @react-three/fiber 9.8.2 · @react-three/drei 10.7.9 · gsap 3.15.0 · zustand 5.0.16 · zod 4.6.7 · tailwindcss / @tailwindcss/postcss 4.3.3 · typescript 6.0.3 · eslint 9.39.5 · eslint-config-next 16.4.2 · vitest 5.0.5 · jsdom 30.1.3 · @playwright/test 1.64.1 · Node 22.12 / npm 10.9
+next 16.4.2 · react / react-dom 19.3.1 · three 0.186.1 · @react-three/fiber 9.8.2 · @react-three/drei 10.7.9 · gsap 3.15.0 · zustand 5.0.16 · zod 4.6.7 · tailwindcss / @tailwindcss/postcss 4.3.3 · typescript 6.0.3 · eslint 9.39.5 · eslint-config-next 16.4.2 · vitest 5.0.5 · jsdom 30.1.3 · @playwright/test 1.64.1 · wrangler 4.152.0 · Node 22.12 / npm 10.9
 
 Version notes / deviations from "latest":
 - **TypeScript 6.0.3, not 7.0.x** — `typescript-eslint` 8.x (used by `eslint-config-next`) supports `typescript <6.1`.

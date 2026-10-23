@@ -9,3 +9,5 @@ test-results/
 next-env.d.ts
 .env*.local
 .claude/settings.local.json
+out/
+.wrangler/
