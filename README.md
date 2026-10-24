@@ -92,8 +92,10 @@ data-error page with the issues instead of a broken atlas. Days are bucketed in 
 - Clicks with pointer travel >= 6 CSS px are ignored (orbit/pan/pinch). Marker hits stop propagation, so they win over islands.
   Hover/selection show a white/red dashed hex outline + cursor; nothing mutates shared materials or geometry.
   Number pills over the tiles use the same 6 px tap threshold, since they move with the camera while orbiting.
-- Tiles are static (no bobbing); idle life comes from chibi pedestrians walking each tile's sidewalk loop, cars on the
-  road rings (`src/lib/crowd.ts`, instanced in `Crowd.tsx`), the train, chimney smoke and fireflies, all paused by "暫停",
+- Tiles are static (no bobbing); idle life comes from chibi pedestrians (sidewalk loops, strolls through open tiles that
+  are checked to clear every building/tree/water footprint, and people crossing zebra crossings between neighbouring
+  tiles), cars on the road rings (`src/lib/crowd.ts`, instanced in `Crowd.tsx`), the train, chimney smoke and fireflies,
+  all paused by "暫停",
   under reduced motion, and while the tab is hidden. Selecting anything pauses the timeline and the guided tour.
 - Keyboard: every island/marker pick has a list button; Enter opens, Escape closes the event, then the topic; focus moves to the
   panel heading on open and back to the list item on close. Range input + play/pause for the timeline.

@@ -142,7 +142,7 @@ export default function WorldScene({ data, quality, reducedMotion, debug = false
         <RelationArc key={relation.id} from={from} to={to} type={relation.type} labelled={!showAllRelations || relation.fromEventId === selectedEventId || relation.toEventId === selectedEventId} />
       ))}
       <Surroundings bounds={world.bounds} quality={quality} preset={preset} animate={animate} smoke={world.smoke} />
-      <Crowd placements={world.placements} walkersPerTile={quality.walkersPerTile} cars={quality.cars} animate={animate} shadows={quality.shadows} />
+      <Crowd placements={world.placements} tiles={world.tiles} quality={quality} animate={animate} />
       <Dust bounds={world.bounds} count={quality.particles} animate={animate} />
       <CameraDirector
         bounds={world.bounds}

@@ -4,15 +4,17 @@ import { useFrame } from "@react-three/fiber";
 import { memo, useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { getPrimitiveGeometry } from "@/lib/city-geometry";
-import { generateCars, generateWalkers, loopPoint, travelled, type Car, type Walker } from "@/lib/crowd";
+import { generateCars, generateCrossings, generateWalkers, pathLength, pathPoint, travelled } from "@/lib/crowd";
 import type { IslandPlacement } from "@/lib/layout";
-import { getPropMaterial } from "./materials";
+import type { QualitySettings } from "@/lib/quality";
+import type { TileSpec } from "@/lib/tile-generator";
+import { getLineMaterial, getPropMaterial } from "./materials";
 
 /*
- * Ambient pedestrians and traffic. Each body part is one InstancedMesh for
- * the whole city; per frame we only rewrite instance matrices (no React
- * state). With reduced motion / paused animations the crowd freezes at t = 0,
- * so frames stay deterministic.
+ * Ambient pedestrians, zebra crossings and traffic. Each body part is one
+ * InstancedMesh for the whole city; per frame we only rewrite instance
+ * matrices (no React state). With reduced motion / paused animations the
+ * crowd freezes, so frames stay deterministic.
  */
 
 const tmp = new THREE.Object3D();
@@ -41,15 +43,24 @@ function setColors(mesh: THREE.InstancedMesh | null, colors: readonly string[]) 
 
 interface CrowdProps {
   placements: readonly IslandPlacement[];
-  walkersPerTile: number;
-  cars: number;
+  tiles: ReadonlyMap<string, TileSpec>;
+  quality: QualitySettings;
   animate: boolean;
-  shadows: boolean;
 }
 
-function CrowdImpl({ placements, walkersPerTile, cars: carCount, animate, shadows }: CrowdProps) {
-  const walkers = useMemo(() => generateWalkers(placements, walkersPerTile), [placements, walkersPerTile]);
-  const cars = useMemo(() => generateCars(placements, carCount), [placements, carCount]);
+function CrowdImpl({ placements, tiles, quality, animate }: CrowdProps) {
+  const walkers = useMemo(
+    () =>
+      generateWalkers(placements, tiles, {
+        perTile: quality.walkersPerTile,
+        interiorPerTile: quality.interiorWalkers,
+        crossingShare: quality.crossingShare,
+      }).map((w) => ({ ...w, length: pathLength(w.path) })),
+    [placements, tiles, quality.walkersPerTile, quality.interiorWalkers, quality.crossingShare],
+  );
+  const cars = useMemo(() => generateCars(placements, quality.cars).map((c) => ({ ...c, length: pathLength(c.path) })), [placements, quality.cars]);
+  const stripes = useMemo(() => generateCrossings(placements).flatMap((c) => c.stripes), [placements]);
+  const shadows = quality.shadows;
 
   const bodyRef = useRef<THREE.InstancedMesh>(null);
   const headRef = useRef<THREE.InstancedMesh>(null);
@@ -57,6 +68,7 @@ function CrowdImpl({ placements, walkersPerTile, cars: carCount, animate, shadow
   const legRef = useRef<THREE.InstancedMesh>(null);
   const carRef = useRef<THREE.InstancedMesh>(null);
   const cabinRef = useRef<THREE.InstancedMesh>(null);
+  const stripeRef = useRef<THREE.InstancedMesh>(null);
 
   useLayoutEffect(() => {
     setColors(bodyRef.current, walkers.map((w) => w.shirt));
@@ -67,33 +79,44 @@ function CrowdImpl({ placements, walkersPerTile, cars: carCount, animate, shadow
     setColors(cabinRef.current, cars.map(() => "#cfe3f0"));
   }, [walkers, cars]);
 
+  // Zebra stripes are static.
+  useLayoutEffect(() => {
+    const mesh = stripeRef.current;
+    if (!mesh) return;
+    stripes.forEach((s, i) => {
+      tmp.position.set(s.x, 0.04, s.z);
+      tmp.rotation.set(0, s.rotationY, 0);
+      tmp.scale.set(1.15, 0.02, 0.2);
+      tmp.updateMatrix();
+      mesh.setMatrixAt(i, tmp.matrix);
+    });
+    mesh.instanceMatrix.needsUpdate = true;
+    mesh.computeBoundingSphere();
+  }, [stripes]);
+
   const place = useMemo(
     () => (t: number) => {
       const body = bodyRef.current;
       const head = headRef.current;
       const hair = hairRef.current;
       const legs = legRef.current;
-      walkers.forEach((w: Walker, i) => {
-        const p = placements[w.tile];
-        if (!p) return;
-        const u = travelled(w.start, w.speed, w.radius, w.direction, t);
-        const { x, z, heading } = loopPoint(w.radius + w.lateral, u, w.direction);
+      const moving = t > 0;
+      walkers.forEach((w, i) => {
+        const { x, z, heading } = pathPoint(w.path, travelled(w.start, w.speed, w.length, t));
         const phase = (t * STEP_HZ + w.start * 10) * Math.PI * 2;
-        const swing = animateSwing(t) ? Math.sin(phase) * 0.55 : 0;
-        const bounce = animateSwing(t) ? Math.abs(Math.sin(phase)) * 0.035 : 0;
+        const swing = moving ? Math.sin(phase) * 0.55 : 0;
+        const bounce = moving ? Math.abs(Math.sin(phase)) * 0.035 : 0;
         const s = w.scale * WALKER_SCALE;
-        const wx = p.x + x;
-        const wz = p.z + z;
 
         // Torso (slightly tapered), sitting on the hips.
-        tmp.position.set(wx, (HIP + bounce) * s, wz);
+        tmp.position.set(x, (HIP + bounce) * s, z);
         tmp.rotation.set(0, heading, 0);
         tmp.scale.set(0.24 * s, BODY_H * s, 0.18 * s);
         tmp.updateMatrix();
         body?.setMatrixAt(i, tmp.matrix);
 
         // Big round head + hair cap: the chibi read.
-        tmp.position.set(wx, (HIP + BODY_H + bounce - 0.02) * s, wz);
+        tmp.position.set(x, (HIP + BODY_H + bounce - 0.02) * s, z);
         tmp.scale.set(HEAD * s, HEAD * s, HEAD * s);
         tmp.updateMatrix();
         head?.setMatrixAt(i, tmp.matrix);
@@ -107,7 +130,7 @@ function CrowdImpl({ placements, walkersPerTile, cars: carCount, animate, shadow
         const sin = Math.sin(heading);
         for (const side of [-1, 1] as const) {
           const ox = side * 0.055 * s;
-          tmp.position.set(wx + ox * cos, (HIP + bounce) * s, wz - ox * sin);
+          tmp.position.set(x + ox * cos, (HIP + bounce) * s, z - ox * sin);
           tmp.rotation.set(side * swing, heading, 0, "YXZ");
           tmp.scale.set(0.08 * s, HIP * s, 0.09 * s);
           tmp.updateMatrix();
@@ -118,12 +141,9 @@ function CrowdImpl({ placements, walkersPerTile, cars: carCount, animate, shadow
 
       const car = carRef.current;
       const cabin = cabinRef.current;
-      cars.forEach((c: Car, i) => {
-        const p = placements[c.tile];
-        if (!p) return;
-        const u = travelled(c.start, c.speed, c.radius, c.direction, t);
-        const { x, z, heading } = loopPoint(c.radius, u, c.direction);
-        tmp.position.set(p.x + x, 0.04, p.z + z);
+      cars.forEach((c, i) => {
+        const { x, z, heading } = pathPoint(c.path, travelled(c.start, c.speed, c.length, t));
+        tmp.position.set(x, 0.04, z);
         tmp.rotation.set(0, heading, 0);
         tmp.scale.set(0.42, 0.26, 0.85);
         tmp.updateMatrix();
@@ -138,18 +158,18 @@ function CrowdImpl({ placements, walkersPerTile, cars: carCount, animate, shadow
         if (mesh) mesh.instanceMatrix.needsUpdate = true;
       }
     },
-    [walkers, cars, placements],
+    [walkers, cars],
   );
 
   // Static first frame (also the frozen pose under reduced motion).
+  const elapsed = useRef(0);
   useLayoutEffect(() => {
-    place(0);
+    place(elapsed.current);
     for (const mesh of [bodyRef.current, headRef.current, hairRef.current, legRef.current, carRef.current, cabinRef.current]) {
       mesh?.computeBoundingSphere();
     }
   }, [place]);
 
-  const elapsed = useRef(0);
   useFrame((_, delta) => {
     if (!animate) return;
     // Own clock so pausing resumes where it stopped instead of jumping ahead.
@@ -162,6 +182,7 @@ function CrowdImpl({ placements, walkersPerTile, cars: carCount, animate, shadow
   const mat = getPropMaterial("standard");
   return (
     <group name="crowd" raycast={() => null}>
+      <instancedMesh ref={stripeRef} args={[getPrimitiveGeometry("box"), getLineMaterial(), Math.max(1, stripes.length)]} raycast={() => null} dispose={null} />
       <instancedMesh ref={bodyRef} args={[getPrimitiveGeometry("frustum"), mat, n]} castShadow={shadows} frustumCulled={false} raycast={() => null} dispose={null} />
       <instancedMesh ref={headRef} args={[getPrimitiveGeometry("sphere"), mat, n]} castShadow={shadows} frustumCulled={false} raycast={() => null} dispose={null} />
       <instancedMesh ref={hairRef} args={[getPrimitiveGeometry("dome"), mat, n]} frustumCulled={false} raycast={() => null} dispose={null} />
@@ -170,11 +191,6 @@ function CrowdImpl({ placements, walkersPerTile, cars: carCount, animate, shadow
       <instancedMesh ref={cabinRef} args={[getPrimitiveGeometry("box"), getPropMaterial("facade"), m]} frustumCulled={false} raycast={() => null} dispose={null} />
     </group>
   );
-}
-
-/** Legs only swing once time is moving (frozen pose stands still). */
-function animateSwing(t: number) {
-  return t > 0;
 }
 
 export const Crowd = memo(CrowdImpl);

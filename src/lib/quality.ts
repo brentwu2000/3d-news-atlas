@@ -16,6 +16,10 @@ export interface QualitySettings {
   rimLight: boolean;
   /** Average pedestrians walking each tile's sidewalk. */
   walkersPerTile: number;
+  /** Strollers inside each open tile (plazas, markets, parks…). */
+  interiorWalkers: number;
+  /** Share of zebra crossings with someone crossing (0..1). */
+  crossingShare: number;
   /** Cars driving the road rings. */
   cars: number;
 }
@@ -41,8 +45,8 @@ export function resolveQuality(preference: QualityPreference, hints: DeviceHints
 
 export function qualitySettings(level: QualityLevel): QualitySettings {
   return level === "high"
-    ? { level, dpr: [1, 1.5], antialias: true, shadows: true, shadowMapSize: 1024, propDensity: 1, terrainSegments: 24, particles: 90, rimLight: true, walkersPerTile: 4, cars: 14 }
-    : { level, dpr: [1, 1], antialias: false, shadows: false, shadowMapSize: 512, propDensity: 0.6, terrainSegments: 16, particles: 24, rimLight: true, walkersPerTile: 2, cars: 6 };
+    ? { level, dpr: [1, 1.5], antialias: true, shadows: true, shadowMapSize: 1024, propDensity: 1, terrainSegments: 24, particles: 90, rimLight: true, walkersPerTile: 4, interiorWalkers: 3, crossingShare: 0.7, cars: 14 }
+    : { level, dpr: [1, 1], antialias: false, shadows: false, shadowMapSize: 512, propDensity: 0.6, terrainSegments: 16, particles: 24, rimLight: true, walkersPerTile: 2, interiorWalkers: 1, crossingShare: 0.35, cars: 6 };
 }
 
 export function readDeviceHints(): DeviceHints {
